@@ -84,6 +84,19 @@ public class NovelTextbox {
 		return initializeTextBox(fontPathFile, 1f, 2f, 20f, x1, y1, x2, y2, color);
 	}
 	
+	/**
+	 * Generates the textbox for draw.
+	 * 
+	 * @param x1
+	 * @param y1
+	 * @param x2
+	 * @param y2
+	 * @param color
+	 * @return
+	 */
+	public Label initializeTextBox(float x1, float y1, float x2, float y2, Color color){
+		return initializeTextBox(NovelConfig.DEFAULT_FONT_PATH, 1f, 2f, 20f, x1, y1, x2, y2, color);
+	}
 	
 	/**
 	 * Generates the textbox for draw.
@@ -220,6 +233,16 @@ public class NovelTextbox {
 		parameters.shadowColor = shadowColor;
 		parameters.shadowOffsetX = shadowOffsetX;
 		parameters.shadowOffsetY = shadowOffsetY;
+	}
+	
+	/**
+	 * Sets the shadow for text
+	 * 
+	 */
+	public void setShadow(){
+		parameters.shadowColor = Color.BLACK;
+		parameters.shadowOffsetX = 1;
+		parameters.shadowOffsetY = 1;
 	}
 	
 	/**

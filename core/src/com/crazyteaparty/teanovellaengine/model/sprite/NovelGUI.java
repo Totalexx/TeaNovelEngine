@@ -1,4 +1,4 @@
-package com.crazyteaparty.teanovellaengine.model.images;
+package com.crazyteaparty.teanovellaengine.model.sprite;
 
 import com.badlogic.gdx.graphics.Texture;
 

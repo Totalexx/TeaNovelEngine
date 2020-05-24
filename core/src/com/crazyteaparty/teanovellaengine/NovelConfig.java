@@ -11,6 +11,8 @@ public abstract class NovelConfig {
 	public static final float CAMERA_WIDTH = 1000f;
 	public static final float CAMERA_HEIGHT = 1000f;
 	
+	public static final String DEFAULT_FONT_PATH = "Montserrat-Regular.ttf";
+	
 	/** Path to fonts*/
 	public static final String PATH_TO_FONT = "gui/fonts/";
 	/** Path to GUI images*/

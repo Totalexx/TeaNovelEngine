@@ -1,7 +1,6 @@
-package com.crazyteaparty.teanovellaengine.model.images;
+package com.crazyteaparty.teanovellaengine.model.sprite;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.crazyteaparty.teanovellaengine.Main;
 import com.crazyteaparty.teanovellaengine.NovelConfig;
 
 public class NovelBackground extends NovelSprite{

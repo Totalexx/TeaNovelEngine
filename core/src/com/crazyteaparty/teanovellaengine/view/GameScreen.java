@@ -4,14 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.Align;
 import com.crazyteaparty.teanovellaengine.Main;
-import com.crazyteaparty.teanovellaengine.model.images.NovelBackground;
-import com.crazyteaparty.teanovellaengine.model.images.NovelGUI;
+import com.crazyteaparty.teanovellaengine.model.sprite.NovelBackground;
+import com.crazyteaparty.teanovellaengine.model.sprite.NovelCharacter;
+import com.crazyteaparty.teanovellaengine.model.sprite.NovelGUI;
 import com.crazyteaparty.teanovellaengine.model.text.NovelTextbox;
 
 public class GameScreen implements Screen{
@@ -21,14 +17,20 @@ public class GameScreen implements Screen{
 	Texture backgroundTexture3;
 	Texture backgroundTexture4;
 	Texture textureNovelGUI;
+	Texture kagomeTexture;
 	 
 	NovelBackground novelBackground;
 	NovelGUI novelGUI;
 	
+	NovelCharacter kagome;
+	
 	NovelTextbox novelTextbox;
+	NovelTextbox name;
 	
 	@Override
 	public void show() {
+		
+		kagomeTexture = new Texture(Gdx.files.internal("images/characters/kagome.png"));
 		
 		backgroundTexture = new Texture(Gdx.files.internal("images/backgrounds/background.jpg"));
 		backgroundTexture2 = new Texture(Gdx.files.internal("images/backgrounds/background2.jpg"));
@@ -40,9 +42,18 @@ public class GameScreen implements Screen{
 		novelGUI = new NovelGUI(textureNovelGUI, -500f, -500f, 1000f, 300f);
 		
 		novelTextbox = new NovelTextbox(16);
-		novelTextbox.setShadow(Color.BLACK, 1, 1);
-		novelTextbox.initializeTextBox("Roboto-Regular.ttf", -450f, -450f, 450f, -250f, Color.WHITE);
-		novelTextbox.setText("Если оно заработает с первого раза, я охуею.");
+		//novelTextbox.setShadow();
+		novelTextbox.initializeTextBox(-450f, -450f, 450f, -280f, Color.WHITE);
+		novelTextbox.setText("Туда");
+	
+		name = new NovelTextbox(18);
+		//name.setShadow(Color.WHITE, 1, 1);
+		name.initializeTextBox(-450f, -250f, 450f, -220f, Color.CYAN);
+		name.setText("Кагоме");
+		
+		kagome = new NovelCharacter(kagomeTexture, 0f, -250f);
+		kagome.setScale(1.2f);
+		
 	}
 
 	int i = 0;
@@ -51,7 +62,9 @@ public class GameScreen implements Screen{
 		
 		Main.batch.begin();
 		novelBackground.draw(Main.batch);
+		kagome.draw(Main.batch);
 		novelGUI.draw(Main.batch);
+		name.draw(Main.batch, 1f);
 		novelTextbox.draw(Main.batch, 1f);
 		Main.batch.end();
 		
@@ -61,11 +74,13 @@ public class GameScreen implements Screen{
 		switch(i){
 			case 1:
 				novelBackground.setTexture(backgroundTexture2);
-				novelTextbox.setText("Я охуел.");
+				novelTextbox.setText("Сюда");
+				kagome.setFlipX(true);
 				break;
 			case 2:
 				novelBackground.setTexture(backgroundTexture3);
-				//label.setText("Она собрала всю свою храбрость и сказала");
+				novelTextbox.setText("А теперь наклоны");
+				kagome.setRotation(20f);
 				break;
 			case 3:
 				novelBackground.setTexture(backgroundTexture4);
@@ -100,3 +115,4 @@ public class GameScreen implements Screen{
 	}
 
 }
+
