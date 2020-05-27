@@ -7,24 +7,25 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.crazyteaparty.teanovellaengine.view.GameScreen;
-import com.crazyteaparty.teanovellaengine.view.MainMenuScreen;
-import com.crazyteaparty.teanovellaengine.view.NovelScreen;
+import com.crazyteaparty.teanovellaengine.model.file.NovelAssets;
+import com.crazyteaparty.teanovellaengine.view.screen.GameScreen;
 
 
 public class Main extends Game {
 
 	public static GameScreen mainScreen;
-	public static MainMenuScreen mainMenuScreen;
-	public static NovelScreen novella;
 	
 	public static OrthographicCamera camera;
 	private static Rectangle viewport;
 	
+	public static NovelAssets assetManager;
 	public static SpriteBatch batch;
 	
 	@Override
 	public void create () {
+		NovelConfig.setConfiguration();
+		
+		assetManager = new NovelAssets();
 		camera = new OrthographicCamera(NovelConfig.CAMERA_WIDTH, NovelConfig.CAMERA_HEIGHT);
 		batch = new SpriteBatch();
 		
@@ -34,7 +35,7 @@ public class Main extends Game {
 	
 	public void render() {
 		Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width, (int) viewport.height);
-		Gdx.gl.glClearColor(0, 0, 0, 1);
+		//Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		camera.update();
@@ -71,5 +72,12 @@ public class Main extends Game {
 		
 		super.resize(width, height);
 	}
-
+	
+	@Override
+	public void dispose () {
+		assetManager.dispose();
+		batch.dispose();
+		super.dispose();
+	}
+	
 }

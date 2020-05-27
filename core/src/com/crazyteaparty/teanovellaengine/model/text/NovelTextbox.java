@@ -23,7 +23,8 @@ import com.crazyteaparty.teanovellaengine.NovelConfig;
 public class NovelTextbox {
 	
 	/** List of characters. */
-	private final String FONT_CHARS = "абвгдеёжзийклмнопрстуфхцчшщъыьэюяabcdefghijklmnopqrstuvwxyzАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"´`'<>";
+	private final String FONT_CHARS = "абвгдеёжзийклмнопрстуфхцчшщъыьэюяabcdefghijklmnopqrstuvwxyzАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮ"
+			+ "ЯABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"´`'<>";
 	
 	/** Parameters for generation font. */
 	private FreeTypeFontParameter parameters;
@@ -128,8 +129,8 @@ public class NovelTextbox {
 	 * @param color
 	 * @return Label
 	 */
-	public Label initializeTextBox(String fontPathFile, CharSequence text, float scaleX, float scaleY, float lineHeight, float x1, 
-			float y1, float x2, float y2, Color color){
+	public Label initializeTextBox (String fontPathFile, CharSequence text, float scaleX, float scaleY, float lineHeight, float x1, 
+			float y1, float x2, float y2, Color color) {
 		generateFont(fontPathFile);
 		font.getData().scaleY = scaleX;
 		font.getData().scaleY = scaleY;
@@ -140,14 +141,84 @@ public class NovelTextbox {
 		return label;
 	}
 	
+	public int iteration = 0;
+	public boolean isStartedSmoothDraw = false;
+	public boolean isFinishedScene = false;
+	public String textToDraw;
+	public String[] words;
+	/**
+	 * draw the text character by character
+	 * 
+	 * @param batch
+	 * @param speedDraw
+	 * @param parentAlpha
+	 */
+	public void drawSmooth (SpriteBatch batch, int speedDraw, float parentAlpha) {
+		if (isStartedSmoothDraw) {
+			float endChar = (float)iteration / (float)speedDraw;
+			if(textToDraw.length() == endChar){
+				isStartedSmoothDraw = false;
+				isFinishedScene = true;
+			}else{
+				if(endChar == (int)endChar){
+					label.setText(textToDraw.substring(0, (int)endChar + 1));
+				}
+				iteration++;
+			}
+			draw(batch, parentAlpha);
+		} else {
+			if (isFinishedScene) {
+				draw(batch, parentAlpha);
+			} else {
+				iteration = 0;
+				textToDraw = label.getText().toString();
+				isStartedSmoothDraw = true;
+			}
+		}
+	}
+	
+	public void newdrawSmooth (SpriteBatch batch, int speedDraw, float parentAlpha) {
+		if (isStartedSmoothDraw) {
+			float endChar = (float) iteration / (float) speedDraw;
+			if (textToDraw.length() == endChar) {
+				isStartedSmoothDraw = false;
+				isFinishedScene = true;
+			} else {
+				if (endChar == (int) endChar) {
+					label.setText(textToDraw.substring(0, (int) endChar + 1));
+				}
+				iteration++;
+			}
+			draw(batch, parentAlpha);
+		} else {
+			if (isFinishedScene) {
+				draw(batch, parentAlpha);
+			} else {
+				iteration = 0;
+				textToDraw = label.getText().toString();
+				words = textToDraw.split(" ");
+				isStartedSmoothDraw = true;
+			}
+		}
+	}
+	
 	/**
 	 * Draws the text
 	 * 
 	 * @param batch
 	 * @param parentAlpha
 	 */
-	public void draw(SpriteBatch batch, float parentAlpha){
+	public void draw (SpriteBatch batch, float parentAlpha) {
 		label.draw(batch, parentAlpha);
+	}
+	
+	/**
+	 * Sets a visible for textbox
+	 * 
+	 * @param visible
+	 */
+	public void setVisible(boolean visible) {
+		label.setVisible(visible);
 	}
 	
 	/**
@@ -219,7 +290,7 @@ public class NovelTextbox {
 	 * @param text
 	 */
 	public void setText(CharSequence text) {
-		label.setText(text);
+		label.setText(text);	
 	}
 	
 	/**

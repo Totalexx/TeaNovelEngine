@@ -1,12 +1,12 @@
 package com.crazyteaparty.teanovellaengine.model.sprite;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.crazyteaparty.teanovellaengine.NovelConfig;
 
 public class NovelGUI extends NovelSprite{
 
-	public NovelGUI(Texture texture, float x, float y, float width, float height) {
+	public NovelGUI(String texturePathFile, float x, float y, float width, float height) {
 	
-		super(texture, x, y, width, height);
+		super(NovelConfig.PATH_TO_GUI_IMAGE + texturePathFile, x, y, width, height);
 
 	}
 

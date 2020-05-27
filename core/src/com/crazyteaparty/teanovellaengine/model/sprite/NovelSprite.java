@@ -1,4 +1,4 @@
-	package com.crazyteaparty.teanovellaengine.model.sprite;
+package com.crazyteaparty.teanovellaengine.model.sprite;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -6,17 +6,29 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.crazyteaparty.teanovellaengine.NovelConfig;
+import com.crazyteaparty.teanovellaengine.model.file.NovelAssets;
 
 public abstract class NovelSprite {
 	
 	public Rectangle bounds;
 	public Sprite sprite;
 	
-	public NovelSprite(Texture texture, float x, float y, float width, float height) {
-		//float centerX = (float)texture.getWidth() * NovelConfig.CAMERA_WIDTH / (float)Gdx.graphics.getWidth() / 2;
-		//float centerY = (float)texture.getHeight() * NovelConfig.CAMERA_HEIGHT / (float)Gdx.graphics.getHeight() / 2;
+	public static Texture emptyTexture = new Texture(Gdx.files.internal(NovelConfig.PATH_TO_GUI_IMAGE + "empty.jpg"));
+	
+	public NovelSprite(String texturePathFile, float x, float y, float width, float height) {
+		//NovelAssets.loadTexture(texturePathFile);
 		bounds = new Rectangle(x, y, width, height);
-		sprite = new Sprite(texture); 
+		sprite = new Sprite(emptyTexture); 
+	}
+	
+	public NovelSprite(String texturePathFile, float x, float y) {
+		NovelAssets.loadTexture(texturePathFile);
+		float virtualWidthTexture = (float)NovelAssets.getTexture(texturePathFile).getWidth()
+				* NovelConfig.CAMERA_WIDTH / (float)Gdx.graphics.getWidth();
+		float virtualHeightTexture = (float)NovelAssets.getTexture(texturePathFile).getHeight()
+				* NovelConfig.CAMERA_HEIGHT / (float)Gdx.graphics.getHeight();
+		bounds = new Rectangle(x - virtualWidthTexture / 2, y - virtualHeightTexture / 2, virtualWidthTexture, virtualHeightTexture);
+		sprite = new Sprite(NovelAssets.getTexture(texturePathFile)); 
 	}
 	
 	public void draw(SpriteBatch batch) {
@@ -24,8 +36,11 @@ public abstract class NovelSprite {
 		sprite.draw(batch);
 	}
 	
-	public void setTexture(Texture texture){
-		sprite.setTexture(texture);
+	public void setTexture(String texturePathFile){
+		NovelAssets.loadTexture(texturePathFile);
+		NovelAssets.getAssetManager().finishLoadingAsset(texturePathFile);
+		//sprite.setTexture(emptyTexture);
+		sprite.setTexture(NovelAssets.getTexture(texturePathFile));
 	}
 	
 	public void setBounds(float x, float y, float width, float height){
