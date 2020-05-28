@@ -1,4 +1,4 @@
-package com.crazyteaparty.teanovelengine.model;
+package com.crazyteaparty.teanovelengine.engine.model;
 
 import com.badlogic.gdx.Gdx;
 

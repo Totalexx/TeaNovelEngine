@@ -1,12 +1,12 @@
-package com.crazyteaparty.teanovelengine.model.sprite;
+package com.crazyteaparty.teanovelengine.engine.model.sprite;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
-import com.crazyteaparty.teanovelengine.NovelConfig;
-import com.crazyteaparty.teanovelengine.model.file.NovelAssets;
+import com.crazyteaparty.teanovelengine.engine.NovelConfig;
+import com.crazyteaparty.teanovelengine.engine.model.file.NovelAssets;
 
 public abstract class NovelSprite {
 	

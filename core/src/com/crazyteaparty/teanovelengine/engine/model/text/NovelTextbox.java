@@ -1,4 +1,4 @@
-package com.crazyteaparty.teanovelengine.model.text;
+package com.crazyteaparty.teanovelengine.engine.model.text;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.Align;
-import com.crazyteaparty.teanovelengine.NovelConfig;
+import com.crazyteaparty.teanovelengine.engine.NovelConfig;
 
 /**
  * Generates the textbox for drawing text in screen

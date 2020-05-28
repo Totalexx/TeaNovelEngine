@@ -2,8 +2,8 @@ package com.crazyteaparty.teanovelengine.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.crazyteaparty.teanovelengine.Main;
-import com.crazyteaparty.teanovelengine.NovelConfig;
+import com.crazyteaparty.teanovelengine.engine.Main;
+import com.crazyteaparty.teanovelengine.engine.NovelConfig;
 
 public class DesktopLauncher {
 	

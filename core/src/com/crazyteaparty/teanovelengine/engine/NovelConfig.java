@@ -1,4 +1,4 @@
-package com.crazyteaparty.teanovelengine;
+package com.crazyteaparty.teanovelengine.engine;
 
 public abstract class NovelConfig {
 

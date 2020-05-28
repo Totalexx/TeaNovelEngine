@@ -1,14 +1,14 @@
-package com.crazyteaparty.teanovelengine.view.screen;
+package com.crazyteaparty.teanovelengine.engine.view.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.crazyteaparty.teanovelengine.Main;
-import com.crazyteaparty.teanovelengine.model.file.NovelAssets;
-import com.crazyteaparty.teanovelengine.model.sprite.NovelBackground;
-import com.crazyteaparty.teanovelengine.model.sprite.NovelCharacter;
-import com.crazyteaparty.teanovelengine.model.sprite.NovelGUI;
-import com.crazyteaparty.teanovelengine.model.text.NovelTextbox;
+import com.crazyteaparty.teanovelengine.engine.Main;
+import com.crazyteaparty.teanovelengine.engine.model.file.NovelAssets;
+import com.crazyteaparty.teanovelengine.engine.model.sprite.NovelBackground;
+import com.crazyteaparty.teanovelengine.engine.model.sprite.NovelCharacter;
+import com.crazyteaparty.teanovelengine.engine.model.sprite.NovelGUI;
+import com.crazyteaparty.teanovelengine.engine.model.text.NovelTextbox;
 
 public class GameScreen implements Screen{
 	 

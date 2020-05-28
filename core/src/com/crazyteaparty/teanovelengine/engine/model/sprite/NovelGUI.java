@@ -1,6 +1,6 @@
-package com.crazyteaparty.teanovelengine.model.sprite;
+package com.crazyteaparty.teanovelengine.engine.model.sprite;
 
-import com.crazyteaparty.teanovelengine.NovelConfig;
+import com.crazyteaparty.teanovelengine.engine.NovelConfig;
 
 public class NovelGUI extends NovelSprite{
 

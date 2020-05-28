@@ -1,8 +1,8 @@
-package com.crazyteaparty.teanovelengine.model.file;
+package com.crazyteaparty.teanovelengine.engine.model.file;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
-import com.crazyteaparty.teanovelengine.NovelConfig;
+import com.crazyteaparty.teanovelengine.engine.NovelConfig;
 
 public class NovelAssets {
 	
