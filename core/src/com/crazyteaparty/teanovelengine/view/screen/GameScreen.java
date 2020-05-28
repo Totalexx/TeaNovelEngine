@@ -22,7 +22,7 @@ public class GameScreen implements Screen{
 	
 	@Override
 	public void show() {
-		NovelAssets.loadBackground("background.itne");
+		NovelAssets.loadBackground("background.jpg");
 		NovelAssets.loadBackground("background2.jpg");
 		NovelAssets.loadBackground("background3.jpg");
 		NovelAssets.loadBackground("background4.jpg");
