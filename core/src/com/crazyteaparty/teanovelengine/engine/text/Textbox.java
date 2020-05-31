@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.Align;
-import com.crazyteaparty.teanovelengine.engine.NovelConfig;
+import com.crazyteaparty.teanovelengine.engine.Config;
 
 /**
  * Generates the textbox for drawing text in screen
@@ -20,7 +20,7 @@ import com.crazyteaparty.teanovelengine.engine.NovelConfig;
  * @author Vitaliy
  *
  */
-public class NovelTextbox {
+public class Textbox {
 	
 	/** List of characters. */
 	private final String FONT_CHARS = "абвгдеёжзийклмнопрстуфхцчшщъыьэюяabcdefghijklmnopqrstuvwxyzАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮ"
@@ -39,7 +39,7 @@ public class NovelTextbox {
 	 * 
 	 * @param fontSize
 	 */
-	public NovelTextbox(int fontSize) {
+	public Textbox(int fontSize) {
 		parameters = new FreeTypeFontParameter();
 		parameters.characters = FONT_CHARS;
 		parameters.size = fontSize;
@@ -54,7 +54,7 @@ public class NovelTextbox {
 	 * @param fontPathFile
 	 */
 	private void generateFont(String fontPathFile) {
-		FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal(NovelConfig.PATH_TO_FONT + fontPathFile));
+		FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal(Config.PATH_TO_FONT + fontPathFile));
 		fontGenerator.scaleForPixelHeight(parameters.size);
 		font = fontGenerator.generateFont(parameters);
 		fontGenerator.dispose();
@@ -98,7 +98,7 @@ public class NovelTextbox {
 	 * @return
 	 */
 	public Label initializeTextBox(float x1, float y1, float x2, float y2, Color color){
-		return initializeTextBox(NovelConfig.DEFAULT_FONT_PATH, 1f, 2f, 20f, x1, y1, x2, y2, color);
+		return initializeTextBox(Config.DEFAULT_FONT_PATH, 1f, 2f, 20f, x1, y1, x2, y2, color);
 	}
 	
 	/**

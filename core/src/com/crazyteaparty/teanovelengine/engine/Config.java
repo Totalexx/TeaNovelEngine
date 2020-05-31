@@ -1,6 +1,6 @@
 package com.crazyteaparty.teanovelengine.engine;
 
-public abstract class NovelConfig {
+public abstract class Config {
 
 	/** Titel novel*/
 	public static final String NOVEL_TITLE = "TeaNovelEngine";

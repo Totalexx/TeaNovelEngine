@@ -2,7 +2,7 @@ package com.crazyteaparty.teanovelengine.engine.input;
 
 import com.badlogic.gdx.InputProcessor;
 
-public class NovelImputProcessor implements InputProcessor{
+public class ImputProcessor implements InputProcessor{
 
 	@Override
 	public boolean keyDown(int keycode) {

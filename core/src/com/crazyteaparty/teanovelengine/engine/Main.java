@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.crazyteaparty.teanovelengine.engine.file.NovelAssets;
+import com.crazyteaparty.teanovelengine.engine.file.Assets;
 import com.crazyteaparty.teanovelengine.engine.screen.GameScreen;
 
 
@@ -18,15 +18,15 @@ public class Main extends Game {
 	public static OrthographicCamera camera;
 	private static Rectangle viewport;
 	
-	public static NovelAssets assetManager;
+	public static Assets assetManager;
 	public static SpriteBatch batch;
 	
 	@Override
 	public void create () {
-		NovelConfig.setConfiguration();
+		Config.setConfiguration();
 		
-		assetManager = new NovelAssets();
-		camera = new OrthographicCamera(NovelConfig.CAMERA_WIDTH, NovelConfig.CAMERA_HEIGHT);
+		assetManager = new Assets();
+		camera = new OrthographicCamera(Config.CAMERA_WIDTH, Config.CAMERA_HEIGHT);
 		batch = new SpriteBatch();
 		
 		mainScreen = new GameScreen();
@@ -50,24 +50,24 @@ public class Main extends Game {
 		float currentScale = 1f;
 		Vector2 cropScreen = new Vector2(0f, 0f);
 		
-		if(currentAspectRatio > NovelConfig.ASPECT_RATIO){
+		if(currentAspectRatio > Config.ASPECT_RATIO){
 		
-			currentScale = (float)height / (float)NovelConfig.WINDOW_HEIGHT;
-			cropScreen.x = (width - NovelConfig.WINDOW_WIDTH * currentScale) / 2f;
+			currentScale = (float)height / (float)Config.WINDOW_HEIGHT;
+			cropScreen.x = (width - Config.WINDOW_WIDTH * currentScale) / 2f;
 		
-		}else if(currentAspectRatio < NovelConfig.ASPECT_RATIO) {
+		}else if(currentAspectRatio < Config.ASPECT_RATIO) {
 		
-			currentScale = (float) width / (float) NovelConfig.WINDOW_WIDTH ;
-			cropScreen.y = (height - NovelConfig.WINDOW_HEIGHT * currentScale) / 2f;
+			currentScale = (float) width / (float) Config.WINDOW_WIDTH ;
+			cropScreen.y = (height - Config.WINDOW_HEIGHT * currentScale) / 2f;
 		
 		} else {
 		
-			currentScale = (float) (width / NovelConfig.WINDOW_WIDTH);
+			currentScale = (float) (width / Config.WINDOW_WIDTH);
 		
 		}
 		
-		float vievportWidth = (float) NovelConfig.WINDOW_WIDTH * currentScale;
-		float vievportHeight = (float) NovelConfig.WINDOW_HEIGHT * currentScale;
+		float vievportWidth = (float) Config.WINDOW_WIDTH * currentScale;
+		float vievportHeight = (float) Config.WINDOW_HEIGHT * currentScale;
 		viewport = new Rectangle(cropScreen.x, cropScreen.y, vievportWidth, vievportHeight);
 		
 		super.resize(width, height);

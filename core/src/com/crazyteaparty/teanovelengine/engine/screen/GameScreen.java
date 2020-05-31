@@ -4,44 +4,44 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.crazyteaparty.teanovelengine.engine.Main;
-import com.crazyteaparty.teanovelengine.engine.file.NovelAssets;
-import com.crazyteaparty.teanovelengine.engine.sprite.NovelBackground;
-import com.crazyteaparty.teanovelengine.engine.sprite.NovelCharacter;
-import com.crazyteaparty.teanovelengine.engine.sprite.NovelGUI;
-import com.crazyteaparty.teanovelengine.engine.text.NovelTextbox;
+import com.crazyteaparty.teanovelengine.engine.file.Assets;
+import com.crazyteaparty.teanovelengine.engine.sprite.Background;
+import com.crazyteaparty.teanovelengine.engine.sprite.Character;
+import com.crazyteaparty.teanovelengine.engine.sprite.GUI;
+import com.crazyteaparty.teanovelengine.engine.text.Textbox;
 
 public class GameScreen implements Screen{
 	 
-	NovelBackground novelBackground;
-	NovelGUI novelGUI;
+	Background background;
+	GUI gUI;
 	
-	NovelCharacter kagome;
+	Character kagome;
 	
-	NovelTextbox novelTextbox;
-	NovelTextbox name;
+	Textbox textbox;
+	Textbox name;
 	
 	@Override
 	public void show() {
-		NovelAssets.loadBackground("background.jpg");
-		NovelAssets.loadBackground("background2.jpg");
-		NovelAssets.loadBackground("background3.jpg");
-		NovelAssets.loadBackground("background4.jpg");
-		NovelAssets.loadCharacter("kagome.png");
-		NovelAssets.loadGUITexture("novelGUI.png");
-		NovelAssets.waitLoadAsset();
+		Assets.loadBackground("background.jpg");
+		Assets.loadBackground("background2.jpg");
+		Assets.loadBackground("background3.jpg");
+		Assets.loadBackground("background4.jpg");
+		Assets.loadCharacter("kagome.png");
+		Assets.loadGUITexture("gUI.png");
+		Assets.waitLoadAsset();
 		
-		novelBackground = new NovelBackground("background.jpg");
-		novelGUI = new NovelGUI("novelGUI.png", -500f, -500f, 1000f, 300f);
+		background = new Background("background.jpg");
+		gUI = new GUI("gUI.png", -500f, -500f, 1000f, 300f);
 		
-		novelTextbox = new NovelTextbox(16);
-		novelTextbox.initializeTextBox(-450f, -450f, 450f, -280f, Color.WHITE);
-		novelTextbox.setText("В 2016 году из-за крупного взлома банковских систем, правительство организовывает Федеральное бюро по киберпреступности, для борьбы с хакерами. ФБК имеет отдел по вычислению местоположения хакеров, отдел по задержанию, отдел допросов и отдел по предотвращению взломов и атак.");
+		textbox = new Textbox(16);
+		textbox.initializeTextBox(-450f, -450f, 450f, -280f, Color.WHITE);
+		textbox.setText("В 2016 году из-за крупного взлома банковских систем, правительство организовывает Федеральное бюро по киберпреступности, для борьбы с хакерами. ФБК имеет отдел по вычислению местоположения хакеров, отдел по задержанию, отдел допросов и отдел по предотвращению взломов и атак.");
 	
-		name = new NovelTextbox(18);
+		name = new Textbox(18);
 		name.initializeTextBox(-450f, -250f, 450f, -220f, Color.CYAN);
 		name.setText("Кагоме");
 		
-		kagome = new NovelCharacter("kagome.png", 0f, -250f);
+		kagome = new Character("kagome.png", 0f, -250f);
 		kagome.setScale(1.2f);
 		
 	}
@@ -51,43 +51,43 @@ public class GameScreen implements Screen{
 	public void render(float delta) {
 		
 		Main.batch.begin();
-		novelBackground.draw(Main.batch);
+		background.draw(Main.batch);
 		kagome.draw(Main.batch);
-		novelGUI.draw(Main.batch);
+		gUI.draw(Main.batch);
 		name.draw(Main.batch, 1f);
-		novelTextbox.newdrawSmooth(Main.batch, 2, 1f);
+		textbox.newdrawSmooth(Main.batch, 2, 1f);
 		Main.batch.end();
 		
 		if(Gdx.input.justTouched()){
 			i++;
-			novelTextbox.isFinishedScene = false;
-			novelTextbox.isStartedSmoothDraw = false;
+			textbox.isFinishedScene = false;
+			textbox.isStartedSmoothDraw = false;
 				switch(i){
 				case 1:
-					novelTextbox.setText("Шёл 2035-ый год. Благодаря исследованиям в области нейробиологии, компания “CyberVR(название временное)” разработала технологию полного погружения в виртуальную реальность. Специальный нейрошлем, способный погружать человека в осознанный сон. Благодаря этому состоянию сна, пользователь может в полной мере ощущать присутствие в VR.");
+					textbox.setText("Шёл 2035-ый год. Благодаря исследованиям в области нейробиологии, компания “CyberVR(название временное)” разработала технологию полного погружения в виртуальную реальность. Специальный нейрошлем, способный погружать человека в осознанный сон. Благодаря этому состоянию сна, пользователь может в полной мере ощущать присутствие в VR.");
 					kagome.setFlipX(true);
 					break;
 				case 2:
-					novelTextbox.setText("А теперь наклоны");
+					textbox.setText("А теперь наклоны");
 					kagome.setRotation(20f);
 					break;
 				case 3:
-					novelTextbox.setText("Огурцы!!!!!");
+					textbox.setText("Огурцы!!!!!");
 					break;
 			}
 		}
 		switch(i){
 			case 0:
-				novelBackground.setTexture("background.jpg");
+				background.setTexture("background.jpg");
 				break;
 			case 1:
-				novelBackground.setTexture("background2.jpg");
+				background.setTexture("background2.jpg");
 				break;
 			case 2:
-				novelBackground.setTexture("background3.jpg");
+				background.setTexture("background3.jpg");
 				break;
 			case 3:
-				novelBackground.setTexture("background4.jpg");
+				background.setTexture("background4.jpg");
 				break;
 		}
 	}

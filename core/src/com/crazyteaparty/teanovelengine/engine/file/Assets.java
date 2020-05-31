@@ -2,9 +2,9 @@ package com.crazyteaparty.teanovelengine.engine.file;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
-import com.crazyteaparty.teanovelengine.engine.NovelConfig;
+import com.crazyteaparty.teanovelengine.engine.Config;
 
-public class NovelAssets {
+public class Assets {
 	
 	private static AssetManager assetManager = new AssetManager();
 	
@@ -13,11 +13,11 @@ public class NovelAssets {
 	}
 	
 	public static void loadBackground(String pathToFile){
-		load(NovelConfig.PATH_TO_IMAGES_BACKGROUNDS + pathToFile, Texture.class);
+		load(Config.PATH_TO_IMAGES_BACKGROUNDS + pathToFile, Texture.class);
 	}
 	
 	public static void loadCharacter(String pathToFile){
-		load(NovelConfig.PATH_TO_IMAGES_CHARACTERS + pathToFile, Texture.class);
+		load(Config.PATH_TO_IMAGES_CHARACTERS + pathToFile, Texture.class);
 	}
 	
 	public static void loadTexture(String pathToFile){
@@ -25,7 +25,7 @@ public class NovelAssets {
 	}
 	
 	public static void loadGUITexture(String pathToFile){
-		load(NovelConfig.PATH_TO_GUI_IMAGE + pathToFile, Texture.class);
+		load(Config.PATH_TO_GUI_IMAGE + pathToFile, Texture.class);
 	}
 	
 	public static <T> T get (String pathToFile, Class <T> type) {
