@@ -1,4 +1,4 @@
-package com.crazyteaparty.teanovelengine.engine.model.music;
+package com.crazyteaparty.teanovelengine.engine.music;
 
 import com.badlogic.gdx.Gdx;
 

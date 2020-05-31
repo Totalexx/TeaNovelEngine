@@ -1,8 +1,8 @@
-package com.crazyteaparty.teanovelengine.engine.view.screen;
+package com.crazyteaparty.teanovelengine.engine.screen;
 
 import com.badlogic.gdx.Screen;
 
-public class IntroductionScreen implements Screen {
+public class MainMenuScreen implements Screen{
 
 	@Override
 	public void show() {

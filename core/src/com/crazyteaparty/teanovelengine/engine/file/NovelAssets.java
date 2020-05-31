@@ -1,4 +1,4 @@
-package com.crazyteaparty.teanovelengine.engine.model.file;
+package com.crazyteaparty.teanovelengine.engine.file;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;

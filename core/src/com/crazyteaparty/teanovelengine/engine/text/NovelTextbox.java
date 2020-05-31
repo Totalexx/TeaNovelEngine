@@ -1,4 +1,4 @@
-package com.crazyteaparty.teanovelengine.engine.model.text;
+package com.crazyteaparty.teanovelengine.engine.text;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;

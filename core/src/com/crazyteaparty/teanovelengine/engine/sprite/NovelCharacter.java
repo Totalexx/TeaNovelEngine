@@ -1,4 +1,4 @@
-package com.crazyteaparty.teanovelengine.engine.model.sprite;
+package com.crazyteaparty.teanovelengine.engine.sprite;
 
 import com.crazyteaparty.teanovelengine.engine.NovelConfig;
 

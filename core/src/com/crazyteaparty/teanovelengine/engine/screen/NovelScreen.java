@@ -1,4 +1,4 @@
-package com.crazyteaparty.teanovelengine.engine.view.screen;
+package com.crazyteaparty.teanovelengine.engine.screen;
 
 import com.badlogic.gdx.Screen;
 

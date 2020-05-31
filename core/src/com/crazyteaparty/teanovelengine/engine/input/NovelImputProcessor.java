@@ -1,4 +1,4 @@
-package com.crazyteaparty.teanovelengine.engine.controller;
+package com.crazyteaparty.teanovelengine.engine.input;
 
 import com.badlogic.gdx.InputProcessor;
 
