@@ -13,7 +13,7 @@ import com.crazyteaparty.teanovelengine.engine.text.Textbox;
 public class GameScreen implements Screen{
 	 
 	Background background;
-	GUI gUI;
+	GUI gui;
 	
 	Character kagome;
 	
@@ -27,11 +27,11 @@ public class GameScreen implements Screen{
 		Assets.loadBackground("background3.jpg");
 		Assets.loadBackground("background4.jpg");
 		Assets.loadCharacter("kagome.png");
-		Assets.loadGUITexture("gUI.png");
+		Assets.loadGUITexture("novelGUI.png");
 		Assets.waitLoadAsset();
 		
 		background = new Background("background.jpg");
-		gUI = new GUI("gUI.png", -500f, -500f, 1000f, 300f);
+		gui = new GUI("novelGUI.png", -500f, -500f, 1000f, 300f);
 		
 		textbox = new Textbox(16);
 		textbox.initializeTextBox(-450f, -450f, 450f, -280f, Color.WHITE);
@@ -53,7 +53,7 @@ public class GameScreen implements Screen{
 		Main.batch.begin();
 		background.draw(Main.batch);
 		kagome.draw(Main.batch);
-		gUI.draw(Main.batch);
+		gui.draw(Main.batch);
 		name.draw(Main.batch, 1f);
 		textbox.newdrawSmooth(Main.batch, 2, 1f);
 		Main.batch.end();
