@@ -3,14 +3,16 @@ package com.crazyteaparty.teanovelengine.engine.text;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.Align;
 import com.crazyteaparty.teanovelengine.engine.Config;
+import com.crazyteaparty.teanovelengine.engine.utils.ConvertSize;
 
 /**
  * Generates the textbox for drawing text in screen
@@ -20,18 +22,27 @@ import com.crazyteaparty.teanovelengine.engine.Config;
  * @author Vitaliy
  *
  */
-public class Textbox {
+public class Textbox extends Actor{
 	
 	/** List of characters. */
-	private final String FONT_CHARS = "абвгдеёжзийклмнопрстуфхцчшщъыьэюяabcdefghijklmnopqrstuvwxyzАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮ"
+	protected final String FONT_CHARS = "абвгдеёжзийклмнопрстуфхцчшщъыьэюяabcdefghijklmnopqrstuvwxyzАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮ"
 			+ "ЯABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"´`'<>";
 	
 	/** Parameters for generation font. */
-	private FreeTypeFontParameter parameters;
+	protected FreeTypeFontParameter parameters;
 	/** Font for generation LabelStyle. */
-	private BitmapFont font;
+	protected BitmapFont font;
 	/** Label for drawing text. */
-	private Label label;
+	protected Label label;
+	/** Draw text char by char*/
+	protected boolean charByChar = false;
+	/** pause in drawing*/
+	protected boolean pauseDraw = false;
+    /** End of draw*/
+	protected boolean endDraw = false;
+	
+	protected String currentText;
+	
 	
 	/**
 	 * Used to drawing text
@@ -55,8 +66,8 @@ public class Textbox {
 	 */
 	private void generateFont(String fontPathFile) {
 		FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal(Config.PATH_TO_FONT + fontPathFile));
-		fontGenerator.scaleForPixelHeight(parameters.size);
 		font = fontGenerator.generateFont(parameters);
+		font.getData().markupEnabled = true;
 		fontGenerator.dispose();
 	}
 	
@@ -67,7 +78,7 @@ public class Textbox {
 	 * @param color
 	 * @return Label
 	 */
-	private Label generateLabel(CharSequence text,Color color) {	
+	private Label generateLabel(CharSequence text, String defaultToken, Color color) {
 		label = new Label(text, new LabelStyle(font, color));
 		return label;
 	}
@@ -84,7 +95,7 @@ public class Textbox {
 	 * @return
 	 */
 	public Label initializeTextBox(String fontPathFile, float x1, float y1, float x2, float y2, Color color){
-		return initializeTextBox(fontPathFile, 1f, 2f, 20f, x1, y1, x2, y2, color);
+		return initializeTextBox(fontPathFile, 1f, 1f, 20f, x1, y1, x2, y2, color);
 	}
 	
 	/**
@@ -98,7 +109,7 @@ public class Textbox {
 	 * @return
 	 */
 	public Label initializeTextBox(float x1, float y1, float x2, float y2, Color color){
-		return initializeTextBox(Config.DEFAULT_FONT_PATH, 1f, 2f, 20f, x1, y1, x2, y2, color);
+		return initializeTextBox(Config.DEFAULT_FONT_PATH, x1, y1, x2, y2, color);
 	}
 	
 	/**
@@ -133,75 +144,36 @@ public class Textbox {
 	 */
 	public Label initializeTextBox (String fontPathFile, CharSequence text, float scaleX, float scaleY, float lineHeight, float x1, 
 			float y1, float x2, float y2, Color color) {
+		return initializeTextBox(fontPathFile, "{ENDTEXT}", text, scaleX, scaleY, lineHeight, x1, y1, x2, y2, color);
+	}
+	
+	/**
+	 * Generates the textbox for draw.
+	 * 
+	 * @param fontPathFile
+	 * @param defaultToken
+	 * @param text
+	 * @param scaleX
+	 * @param scaleY
+	 * @param lineHeight
+	 * @param x1
+	 * @param y1
+	 * @param x2
+	 * @param y2
+	 * @param color
+	 * @return Label
+	 */
+	public Label initializeTextBox (String fontPathFile, String defaultToken, CharSequence text, float scaleX, float scaleY, float lineHeight, float x1, 
+			float y1, float x2, float y2, Color color) {
 		generateFont(fontPathFile);
 		font.getData().scaleY = scaleX;
 		font.getData().scaleY = scaleY;
 		font.getData().setLineHeight(lineHeight);
-		generateLabel(text, color);
+		generateLabel(text, defaultToken, color);
 		setTextBox(x1, y1, x2, y2);
 		setWrap(true);
+		currentText = text.toString();
 		return label;
-	}
-	
-	public int iteration = 0;
-	public boolean isStartedSmoothDraw = false;
-	public boolean isFinishedScene = false;
-	public String textToDraw;
-	public String[] words;
-	/**
-	 * draw the text character by character
-	 * 
-	 * @param batch
-	 * @param speedDraw
-	 * @param parentAlpha
-	 */
-	public void drawSmooth (SpriteBatch batch, int speedDraw, float parentAlpha) {
-		if (isStartedSmoothDraw) {
-			float endChar = (float)iteration / (float)speedDraw;
-			if(textToDraw.length() == endChar){
-				isStartedSmoothDraw = false;
-				isFinishedScene = true;
-			}else{
-				if(endChar == (int)endChar){
-					label.setText(textToDraw.substring(0, (int)endChar + 1));
-				}
-				iteration++;
-			}
-			draw(batch, parentAlpha);
-		} else {
-			if (isFinishedScene) {
-				draw(batch, parentAlpha);
-			} else {
-				iteration = 0;
-				textToDraw = label.getText().toString();
-				isStartedSmoothDraw = true;
-			}
-		}
-	}
-	
-	public void newdrawSmooth (SpriteBatch batch, int speedDraw, float parentAlpha) {
-		if (isStartedSmoothDraw) {
-			float endChar = (float) iteration / (float) speedDraw;
-			if (textToDraw.length() == endChar) {
-				isStartedSmoothDraw = false;
-				isFinishedScene = true;
-			} else {
-				if (endChar == (int) endChar) {
-					label.setText(textToDraw.substring(0, (int) endChar + 1));
-				}
-				iteration++;
-			}
-			draw(batch, parentAlpha);
-		} else {
-			if (isFinishedScene) {
-				draw(batch, parentAlpha);
-			} else {
-				iteration = 0;
-				textToDraw = label.getText().toString();
-				words = textToDraw.split(" ");
-				isStartedSmoothDraw = true;
-			}
-		}
 	}
 	
 	/**
@@ -209,9 +181,36 @@ public class Textbox {
 	 * 
 	 * @param batch
 	 * @param parentAlpha
+	 * @return 
 	 */
-	public void draw (SpriteBatch batch, float parentAlpha) {
+	float speedDraw = 10;
+	int iteration = 1;
+	@Override
+	public void draw(Batch batch, float parentAlpha) {
+		if(charByChar && !(endDraw && pauseDraw)) {
+			float indexChar = iteration / speedDraw;
+			if(indexChar == (int) indexChar) {
+				String setText = currentText.substring(1, (int) indexChar) + "[#000000FF]" 
+						+ currentText.substring((int) indexChar, currentText.length());
+				label.setText(setText);
+				/*if(false) {
+					pauseDraw = true;
+				}*/
+			}
+			if(label.getText().length == indexChar) {
+				endDraw = true;
+			}
+			iteration++;
+		}
 		label.draw(batch, parentAlpha);
+	}
+	
+	public void setSpeedDraw(float speedDraw) {
+		this.speedDraw = speedDraw;
+	}
+	
+	public void setCharbyChar(boolean charByChar) {
+		this.charByChar = charByChar;
 	}
 	
 	/**
@@ -219,7 +218,9 @@ public class Textbox {
 	 * 
 	 * @param visible
 	 */
+	@Override
 	public void setVisible(boolean visible) {
+		super.setVisible(visible);
 		label.setVisible(visible);
 	}
 	
@@ -233,9 +234,14 @@ public class Textbox {
 	 * @param alignment
 	 */
 	public void setTextBox(float x1, float y1, float x2, float y2, int alignment) {
+		x1 = ConvertSize.virtualXToReal(x1);
+		y1 = ConvertSize.virtualYToReal(y1);
+		x2 = ConvertSize.virtualXToReal(x2);
+		y2 = ConvertSize.virtualYToReal(y2);
+		super.setBounds(x1, y1, x2 - x1, y2 - y1);
 		label.setPosition(x1, y1);
+		label.setSize(x2 - x1, y2 - y1);
 		label.setAlignment(alignment);
-		label.setSize(Math.abs(x1) + x2, Math.abs(y1) + y2);
 	}
 	
 	/**
@@ -273,6 +279,7 @@ public class Textbox {
 	 * 
 	 * @param color
 	 */
+	@Override
 	public void setColor(Color color) {
 		label.setColor(color);
 	}
@@ -282,7 +289,9 @@ public class Textbox {
 	 * 
 	 * @param scale
 	 */
+	@Override
 	public void setScale(float scale) {
+		super.setScale(scale);
 		label.setScale(scale);
 	}
 	
@@ -292,6 +301,7 @@ public class Textbox {
 	 * @param text
 	 */
 	public void setText(CharSequence text) {
+		currentText = text.toString();
 		label.setText(text);	
 	}
 	
