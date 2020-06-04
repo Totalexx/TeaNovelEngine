@@ -1,61 +1,68 @@
 package com.crazyteaparty.teanovelengine.engine.sprite;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
-import com.crazyteaparty.teanovelengine.engine.Config;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.crazyteaparty.teanovelengine.engine.file.Assets;
+import com.crazyteaparty.teanovelengine.engine.utils.ConvertSize;
 
-public abstract class Sprites {
+public abstract class Sprites extends Actor{
 	
-	public Rectangle bounds;
-	public Sprite sprite;
+	protected Sprite sprite;
 	
-	//public static Texture emptyTexture = new Texture(Gdx.files.internal(Config.PATH_TO_GUI_IMAGE + "empty.jpg"));
+	public Sprites(String texturePathFile) {
+		sprite = new Sprite(Assets.getTexture(texturePathFile));
+	}
+	
+	public Sprites(String texturePathFile, int x, int y, int width, int height) {
+		sprite = new Sprite(Assets.getTexture(texturePathFile));
+		setBounds(x, y, width, height);
+		sprite.setOrigin(0, 0);
+	}
 	
 	public Sprites(String texturePathFile, float x, float y, float width, float height) {
-		//Assets.loadTexture(texturePathFile);
-		bounds = new Rectangle(x, y, width, height);
-		sprite = new Sprite(Assets.getTexture(texturePathFile)); 
+		sprite = new Sprite(Assets.getTexture(texturePathFile));
+		x = ConvertSize.virtualXToReal(x);
+		y = ConvertSize.virtualYToReal(y);
+		super.setBounds(x, y, width, height);
+		sprite.setBounds(x, y, width, height);
+		sprite.setOrigin(0, 0);
 	}
 	
-	public Sprites(String texturePathFile, float x, float y) {
-		Assets.loadTexture(texturePathFile);
-		float virtualWidthTexture = (float)Assets.getTexture(texturePathFile).getWidth()
-				* Config.CAMERA_WIDTH / (float)Gdx.graphics.getWidth();
-		float virtualHeightTexture = (float)Assets.getTexture(texturePathFile).getHeight()
-				* Config.CAMERA_HEIGHT / (float)Gdx.graphics.getHeight();
-		bounds = new Rectangle(x - virtualWidthTexture / 2, y - virtualHeightTexture / 2, virtualWidthTexture, virtualHeightTexture);
-		sprite = new Sprite(Assets.getTexture(texturePathFile)); 
-	}
-	
-	public void draw(SpriteBatch batch) {
-		sprite.setBounds(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
+	@Override
+	public void draw(Batch batch, float parentAlpha) {
 		sprite.draw(batch);
 	}
 	
 	public void setTexture(String texturePathFile){
-		//Assets.loadTexture(texturePathFile);
-		//Assets.getAssetManager().finishLoadingAsset(texturePathFile);
-		//sprites.setTexture(emptyTexture);
 		sprite.setTexture(Assets.getTexture(texturePathFile));
 	}
 	
+	@Override
 	public void setBounds(float x, float y, float width, float height){
-		bounds.set(x, y, width, height);
+		x = ConvertSize.virtualXToReal(x);
+		y = ConvertSize.virtualYToReal(y);
+		width = ConvertSize.virtualWidthToReal(width);
+		height = ConvertSize.virtualHeightToReal(height);
+		super.setBounds(x, y, width, height);
 		sprite.setBounds(x, y, width, height);
 	}
 	
+	@Override
 	public void setScale(float scaleXY){
+		super.setScale(scaleXY);
 		sprite.setScale(scaleXY);
 	}
 	
+	@Override
 	public void setScale(float scaleX, float scaleY){
+		super.setScale(scaleX, scaleY);
 		sprite.setScale(scaleX, scaleY);
 	}
 	
+	@Override
 	public void setRotation(float degrees){
+		super.setRotation(degrees);
 		sprite.setRotation(degrees);
 	}
 	

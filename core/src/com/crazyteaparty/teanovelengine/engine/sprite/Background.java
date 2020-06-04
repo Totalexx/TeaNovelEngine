@@ -7,13 +7,13 @@ public class Background extends Sprites{
 	public Background(String texturePathFile) {
 		super(
 				Config.PATH_TO_IMAGES_BACKGROUNDS + texturePathFile,
-				-Config.CAMERA_WIDTH / 2,
-				-Config.CAMERA_HEIGHT / 2,
-				Config.CAMERA_WIDTH,
-				Config.CAMERA_HEIGHT);	
+				0,
+				0,
+				Config.VIRTUAL_WIDTH,
+				Config.VIRTUAL_HEIGHT);	
 	}
 	
-	public Background(String texturePathFile, float x, float y, float width, float height) {
+	public Background(String texturePathFile, int x, int y, int width, int height) {
 		super(Config.PATH_TO_IMAGES_BACKGROUNDS + texturePathFile, x, y, width, height);
 	}
 	
