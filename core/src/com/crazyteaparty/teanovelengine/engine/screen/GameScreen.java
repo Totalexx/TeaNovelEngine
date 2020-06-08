@@ -43,7 +43,7 @@ public class GameScreen implements Screen{
 		gui = new GUI("novelGUI.png", 0, 0, 100, 30);
 		
 		textbox = new Textbox(18);
-		textbox.initializeTextBox("arial.ttf", 5, 5, 95, 20, Color.WHITE);
+		textbox.initializeTextBox(5, 5, 95, 20, Color.WHITE);
 		textbox.setCharbyChar(true);
 		
 		name = new Textbox(20);

@@ -25,24 +25,28 @@ import com.crazyteaparty.teanovelengine.engine.utils.ConvertSize;
 public class Textbox extends Actor{
 	
 	/** List of characters. */
-	protected final String FONT_CHARS = "абвгдеёжзийклмнопрстуфхцчшщъыьэюяabcdefghijklmnopqrstuvwxyzАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮ"
-			+ "ЯABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"´`'<>";
-	
+	protected String FONT_CHARS = "абвгдеёжзийклмнопрстуфхцчшщъыьэюяabcdefghijklmnopqrstuvwxyzАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮ"
+			+ "ЯABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"´`'<>\u2007";
 	/** Parameters for generation font. */
-	protected FreeTypeFontParameter parameters;
+	private FreeTypeFontParameter parameters;
 	/** Font for generation LabelStyle. */
-	protected BitmapFont font;
+	private BitmapFont font;
 	/** Label for drawing text. */
-	protected Label label;
+	private Label label;
 	/** Draw text char by char*/
-	protected boolean charByChar = false;
+	private boolean charByChar = false;
 	/** pause in drawing*/
-	protected boolean pauseDraw = false;
+	private boolean pauseDraw = false;
     /** End of draw*/
-	protected boolean endDraw = false;
+	private boolean endDraw = false;
 	
-	protected String currentText;
+	private boolean skipCharByChar = false;
 	
+	private String currentText;
+	
+	private float speedDraw = 1f;
+	
+	private int iterationDraw = 0;
 	
 	/**
 	 * Used to drawing text
@@ -183,24 +187,31 @@ public class Textbox extends Actor{
 	 * @param parentAlpha
 	 * @return 
 	 */
-	float speedDraw = 10;
-	int iteration = 1;
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
-		if(charByChar && !(endDraw && pauseDraw)) {
-			float indexChar = iteration / speedDraw;
+		float indexChar;
+		try {
+			indexChar = iterationDraw / speedDraw;
+		} catch (Exception e) {
+			indexChar = iterationDraw;
+		}
+		if(currentText.length() == (int) indexChar) {
+			endDraw = true;
+		}
+		if(charByChar && !(endDraw || pauseDraw)) {
 			if(indexChar == (int) indexChar) {
-				String setText = currentText.substring(1, (int) indexChar) + "[#000000FF]" 
-						+ currentText.substring((int) indexChar, currentText.length());
-				label.setText(setText);
-				/*if(false) {
+				label.setText(currentText.substring(0, (int) (indexChar + 1)) 
+						+ currentText.substring((int) (indexChar + 1), currentText.length()).replaceAll("\\S", "\u2007"));
+				char currentChar = currentText.charAt((int) indexChar);
+				if(currentChar == '.' || currentChar == '!' || currentChar == '?') {
 					pauseDraw = true;
-				}*/
+				}
 			}
-			if(label.getText().length == indexChar) {
-				endDraw = true;
+			iterationDraw++;
+		} else {
+			if(!(endDraw || pauseDraw)) {
+				label.setText(currentText);
 			}
-			iteration++;
 		}
 		label.draw(batch, parentAlpha);
 	}
@@ -302,7 +313,10 @@ public class Textbox extends Actor{
 	 */
 	public void setText(CharSequence text) {
 		currentText = text.toString();
-		label.setText(text);	
+		endDraw = false;
+		pauseDraw = false;
+		iterationDraw = 0;
+		//label.setText(text);	
 	}
 	
 	/**
@@ -326,6 +340,30 @@ public class Textbox extends Actor{
 		parameters.shadowColor = Color.BLACK;
 		parameters.shadowOffsetX = 1;
 		parameters.shadowOffsetY = 1;
+	}
+	
+	public void setPauseDraw(boolean pauseDraw) {
+		this.pauseDraw = pauseDraw;
+	}
+	
+	public void setEndDraw(boolean endDraw) {
+		this.endDraw = endDraw;
+	}
+	
+	public void setSkipCharByChar(boolean skipCharByChar) {
+		this.skipCharByChar = skipCharByChar;
+	}
+	
+	public boolean isSkipCharByChar() {
+		return skipCharByChar;
+	}
+	
+	public boolean isPauseDraw() {
+		return pauseDraw;
+	}
+	
+	public boolean isEndDraw() {
+		return endDraw;
 	}
 	
 	/**
