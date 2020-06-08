@@ -1,7 +1,5 @@
 package com.crazyteaparty.teanovelengine.engine;
 
-import com.rafaskoberg.gdx.typinglabel.TypingConfig;
-
 public abstract class Config {
 
 	/** Title novel*/
