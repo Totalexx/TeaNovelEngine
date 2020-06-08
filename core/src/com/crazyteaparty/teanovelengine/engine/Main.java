@@ -5,18 +5,21 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.crazyteaparty.teanovelengine.engine.input.Input;
 import com.crazyteaparty.teanovelengine.engine.screen.GameScreen;
 
 public class Main extends Game {
 
-	private static Rectangle viewport;
-	private GameScreen mainScreen;
+	private GameScreen gameScreen;
+	private Rectangle viewport;
 	
 	@Override
 	public void create () {
+		gameScreen = new GameScreen();
 		Config.setConfiguration();
-		mainScreen = new GameScreen();
-		super.setScreen(mainScreen);
+		super.setScreen(gameScreen);
+	
+		Gdx.input.setInputProcessor(new Input(gameScreen));
 	}
 	
 	@Override

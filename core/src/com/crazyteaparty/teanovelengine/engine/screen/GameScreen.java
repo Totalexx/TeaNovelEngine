@@ -21,11 +21,12 @@ public class GameScreen implements Screen{
 	
 	Character kagome;
 	
-	Textbox textbox;
+	public Textbox textbox;
 	Textbox name;
 	
 	Stage stage;
 		
+	
 	@Override
 	public void show() {
 		Assets.loadBackground("background.jpg");
@@ -42,9 +43,9 @@ public class GameScreen implements Screen{
 		gui = new GUI("novelGUI.png", 0, 0, 100, 30);
 		
 		textbox = new Textbox(18);
-		textbox.initializeTextBox(5, 5, 95, 20, Color.WHITE);
-		textbox.setText("В 2016 году из-за крупного взлома банковских систем, правительство организовывает Федеральное бюро по киберпреступности, для борьбы с хакерами. ФБК имеет отдел по вычислению местоположения хакеров, отдел по задержанию, отдел допросов и отдел по предотвращению взломов и атак.");
-		//textbox.setCharbyChar(true);
+		textbox.initializeTextBox("arial.ttf", 5, 5, 95, 20, Color.WHITE);
+		textbox.setCharbyChar(true);
+		
 		name = new Textbox(20);
 		name.initializeTextBox(5, 22, 95, 26, Color.CYAN);
 		name.setText("Кагоме");
@@ -53,18 +54,21 @@ public class GameScreen implements Screen{
 		kagome.setScale(1);
 		
 		stage.addActor(background);
-		stage.addActor(kagome);
+		//stage.addActor(kagome);
 		stage.addActor(gui);
 		stage.addActor(name);
 		stage.addActor(textbox);
 		stage.setDebugAll(Config.DEBUG);
+		System.out.print('\u0000');
 	}
 
-	int i = 0;
+	public static int i = 0;
+	int lastI = -1;
 	@Override
 	public void render(float delta) {
-		if(Gdx.input.justTouched() || Gdx.input.isKeyJustPressed(Keys.SPACE)) {
-			switch(i){
+		if(i != lastI){
+			lastI = i;
+			switch(i) {
 				case 4:
 					i = 0;
 				case 0:
@@ -72,21 +76,19 @@ public class GameScreen implements Screen{
 					kagome.setFlipX(false);
 					textbox.setText("В 2016 году из-за крупного взлома банковских систем, правительство организовывает Федеральное бюро по киберпреступности, для борьбы с хакерами. ФБК имеет отдел по вычислению местоположения хакеров, отдел по задержанию, отдел допросов и отдел по предотвращению взломов и атак.");
 					background.setTexture("background.jpg");
-					i++;
 					break;
 				case 1:
 					textbox.setText("Шёл 2035-ый год. Благодаря исследованиям в области нейробиологии, компания “CyberVR(название временное)” разработала технологию полного погружения в виртуальную реальность. Специальный нейрошлем, способный погружать человека в осознанный сон. Благодаря этому состоянию сна, пользователь может в полной мере ощущать присутствие в VR.");
-					textbox.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.");
 					kagome.setFlipX(true);
 					background.setTexture("background2.jpg");
 					break;
 				case 2:
-					textbox.setText("А теперь наклоны");
+					textbox.setText("А теперь наклоны.");
 					kagome.setRotation(20f);
 					background.setTexture("background3.jpg");
 					break;
 				case 3:
-					textbox.setText("Огурцы!!!!!");
+					textbox.setText("Огурцы!");
 					background.setTexture("background4.jpg");
 					break;
 			}
