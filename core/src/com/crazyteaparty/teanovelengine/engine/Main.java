@@ -24,7 +24,7 @@ public class Main extends Game {
 	
 	@Override
 	public void render() {
-		Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width, (int) viewport.height);
+		//Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width, (int) viewport.height);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		GameManager.camera.update();
@@ -36,20 +36,32 @@ public class Main extends Game {
 	public void resize (int width, int height) {
 		float currentAspectRatio = (float) width / (float) height;
 		float currentScale = 1f;
-		Vector2 cropScreen = new Vector2(0f, 0f);
+		float windowWidth;
+		float windowHeight;
+		float aspectRatio;
 		
-		if (currentAspectRatio > Config.ASPECT_RATIO) {
-			currentScale = (float) height / (float) Config.WINDOW_HEIGHT;
-			cropScreen.x = (width - Config.WINDOW_WIDTH * currentScale) / 2f;
-		} else if (currentAspectRatio < Config.ASPECT_RATIO) {
-			currentScale = (float) width / (float) Config.WINDOW_WIDTH ;
-			cropScreen.y = (height - Config.WINDOW_HEIGHT * currentScale) / 2f;
+		Vector2 cropScreen = new Vector2(0f, 0f);
+		if(Gdx.graphics.isFullscreen()) {
+			windowWidth = Config.MONITOR_WIDTH;
+			windowHeight = Config.MONITOR_HEIGHT;
+			aspectRatio = Config.MONITOR_ASPECT_RATIO;
 		} else {
-			currentScale = (float) (width / Config.WINDOW_WIDTH);
+			windowWidth = Config.WINDOW_WIDTH;
+			windowHeight = Config.WINDOW_HEIGHT;
+			aspectRatio = Config.ASPECT_RATIO;	
+		}
+		if (currentAspectRatio > aspectRatio) {
+			currentScale = (float) height / windowHeight;
+			cropScreen.x = (width - windowWidth * currentScale) / 2f;
+		} else if (currentAspectRatio < aspectRatio) {
+			currentScale = (float) width / windowWidth;
+			cropScreen.y = (height - windowHeight * currentScale) / 2f;
+		} else {
+			currentScale = (float) (width / windowWidth);
 		}
 		
-		float vievportWidth = (float) Config.WINDOW_WIDTH * currentScale;
-		float vievportHeight = (float) Config.WINDOW_HEIGHT * currentScale;
+		float vievportWidth =  windowWidth * currentScale;
+		float vievportHeight = windowHeight * currentScale;
 		viewport = new Rectangle(cropScreen.x, cropScreen.y, vievportWidth, vievportHeight);
 		
 		super.resize(width, height);

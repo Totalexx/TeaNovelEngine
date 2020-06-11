@@ -9,6 +9,10 @@ public abstract class Config {
 	public static final int WINDOW_HEIGHT = 600;
 	public static final float ASPECT_RATIO = (float) WINDOW_WIDTH / (float) WINDOW_HEIGHT;
 	
+	public static float MONITOR_WIDTH;
+	public static float MONITOR_HEIGHT;
+	public static float MONITOR_ASPECT_RATIO = MONITOR_WIDTH / MONITOR_HEIGHT;
+	
 	public static float CAMERA_WIDTH = WINDOW_WIDTH;
 	public static float CAMERA_HEIGHT = WINDOW_HEIGHT;
 	
