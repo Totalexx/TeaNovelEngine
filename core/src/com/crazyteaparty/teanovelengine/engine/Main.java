@@ -24,7 +24,7 @@ public class Main extends Game {
 	
 	@Override
 	public void render() {
-		//Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width, (int) viewport.height);
+		Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width, (int) viewport.height);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		GameManager.camera.update();
