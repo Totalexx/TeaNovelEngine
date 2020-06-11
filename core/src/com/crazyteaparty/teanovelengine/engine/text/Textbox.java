@@ -44,7 +44,9 @@ public class Textbox extends Actor{
 	
 	private String currentText;
 	
-	private float speedDraw = 1f;
+	private float currentSpeedDraw = 1f;
+	
+	private float saveSpeedDraw;
 	
 	private int iterationDraw = 0;
 	
@@ -82,7 +84,7 @@ public class Textbox extends Actor{
 	 * @param color
 	 * @return Label
 	 */
-	private Label generateLabel(CharSequence text, String defaultToken, Color color) {
+	private Label generateLabel(CharSequence text, Color color) {
 		label = new Label(text, new LabelStyle(font, color));
 		return label;
 	}
@@ -148,32 +150,11 @@ public class Textbox extends Actor{
 	 */
 	public Label initializeTextBox (String fontPathFile, CharSequence text, float scaleX, float scaleY, float lineHeight, float x1, 
 			float y1, float x2, float y2, Color color) {
-		return initializeTextBox(fontPathFile, "{ENDTEXT}", text, scaleX, scaleY, lineHeight, x1, y1, x2, y2, color);
-	}
-	
-	/**
-	 * Generates the textbox for draw.
-	 * 
-	 * @param fontPathFile
-	 * @param defaultToken
-	 * @param text
-	 * @param scaleX
-	 * @param scaleY
-	 * @param lineHeight
-	 * @param x1
-	 * @param y1
-	 * @param x2
-	 * @param y2
-	 * @param color
-	 * @return Label
-	 */
-	public Label initializeTextBox (String fontPathFile, String defaultToken, CharSequence text, float scaleX, float scaleY, float lineHeight, float x1, 
-			float y1, float x2, float y2, Color color) {
 		generateFont(fontPathFile);
 		font.getData().scaleY = scaleX;
 		font.getData().scaleY = scaleY;
 		font.getData().setLineHeight(lineHeight);
-		generateLabel(text, defaultToken, color);
+		generateLabel(text, color);
 		setTextBox(x1, y1, x2, y2);
 		setWrap(true);
 		currentText = text.toString();
@@ -188,24 +169,32 @@ public class Textbox extends Actor{
 	 * @return 
 	 */
 	@Override
-	public void draw(Batch batch, float parentAlpha) {
+	public void draw (Batch batch, float parentAlpha) {
 		float indexChar;
+		int lengthText = currentText.length();
 		try {
-			indexChar = iterationDraw / speedDraw;
+			indexChar = iterationDraw / currentSpeedDraw;
 		} catch (Exception e) {
 			indexChar = iterationDraw;
 		}
-		if(currentText.length() == (int) indexChar) {
+		if(lengthText == (int) indexChar) {
 			endDraw = true;
+			if(skipCharByChar) {
+				currentSpeedDraw = saveSpeedDraw;
+			}
 		}
 		if(charByChar && !(endDraw || pauseDraw)) {
 			if(indexChar == (int) indexChar) {
 				label.setText(currentText.substring(0, (int) (indexChar + 1)) 
-						+ currentText.substring((int) (indexChar + 1), currentText.length()).replaceAll("\\S", "\u2007"));
+						+ currentText.substring((int) (indexChar + 1), lengthText).replaceAll("\\S", "\u2007"));
 				char currentChar = currentText.charAt((int) indexChar);
 				if(currentChar == '.' || currentChar == '!' || currentChar == '?') {
 					pauseDraw = true;
 				}
+			}
+			if(skipCharByChar) {
+				label.setText(currentText);
+				endDraw = true;
 			}
 			iterationDraw++;
 		} else {
@@ -217,7 +206,8 @@ public class Textbox extends Actor{
 	}
 	
 	public void setSpeedDraw(float speedDraw) {
-		this.speedDraw = speedDraw;
+		this.currentSpeedDraw = speedDraw;
+		saveSpeedDraw = speedDraw;
 	}
 	
 	public void setCharbyChar(boolean charByChar) {
@@ -315,8 +305,8 @@ public class Textbox extends Actor{
 		currentText = text.toString();
 		endDraw = false;
 		pauseDraw = false;
+		skipCharByChar = false;
 		iterationDraw = 0;
-		//label.setText(text);	
 	}
 	
 	/**
