@@ -13,11 +13,9 @@ public class DesktopLauncher {
 		config.title = Config.NOVEL_TITLE;
 		config.fullscreen = Config.FULLSCREEN;
 		config.width = Config.WINDOW_WIDTH;
-		config.height = Config.WINDOW_HEIGHT;	
+		config.height = Config.WINDOW_HEIGHT;
 		config.backgroundFPS = Config.FPS;
 		config.foregroundFPS = Config.FPS;
-		Config.MONITOR_WIDTH = LwjglApplicationConfiguration.getDesktopDisplayMode().width;
-		Config.MONITOR_HEIGHT = LwjglApplicationConfiguration.getDesktopDisplayMode().height;
 		//config.addIcon(path, fileType);
 		new LwjglApplication(new Main(), config);
 	

@@ -5,16 +5,9 @@ public abstract class Config {
 	/** Title novel*/
 	public static final String NOVEL_TITLE = "TeaNovelEngine";
 	public static final boolean FULLSCREEN = false;
-	public static final int WINDOW_WIDTH = 1066;
-	public static final int WINDOW_HEIGHT = 600;
+	public static final int WINDOW_WIDTH = 1066; // 1280
+	public static final int WINDOW_HEIGHT = 600; // 720
 	public static final float ASPECT_RATIO = (float) WINDOW_WIDTH / (float) WINDOW_HEIGHT;
-	
-	public static float MONITOR_WIDTH;
-	public static float MONITOR_HEIGHT;
-	public static float MONITOR_ASPECT_RATIO = MONITOR_WIDTH / MONITOR_HEIGHT;
-	
-	public static float CAMERA_WIDTH = WINDOW_WIDTH;
-	public static float CAMERA_HEIGHT = WINDOW_HEIGHT;
 	
 	public static final int VIRTUAL_WIDTH = 100;
 	public static final int VIRTUAL_HEIGHT = 100;

@@ -27,6 +27,7 @@ public class Main extends Game {
 		Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width, (int) viewport.height);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
+		
 		GameManager.camera.update();
 		
 		super.render();
@@ -36,32 +37,19 @@ public class Main extends Game {
 	public void resize (int width, int height) {
 		float currentAspectRatio = (float) width / (float) height;
 		float currentScale = 1f;
-		float windowWidth;
-		float windowHeight;
-		float aspectRatio;
-		
 		Vector2 cropScreen = new Vector2(0f, 0f);
-		if(Gdx.graphics.isFullscreen()) {
-			windowWidth = Config.MONITOR_WIDTH;
-			windowHeight = Config.MONITOR_HEIGHT;
-			aspectRatio = Config.MONITOR_ASPECT_RATIO;
+		if (currentAspectRatio > Config.ASPECT_RATIO) {
+			currentScale = (float) height / (float) Config.WINDOW_HEIGHT;
+			cropScreen.x = ((float) width - (float) Config.WINDOW_WIDTH * currentScale) / 2f;
+		} else if (currentAspectRatio < Config.ASPECT_RATIO) {
+			currentScale = (float) width / (float) Config.WINDOW_WIDTH;
+			cropScreen.y = ((float) height - (float) Config.WINDOW_HEIGHT * currentScale) / 2f;
 		} else {
-			windowWidth = Config.WINDOW_WIDTH;
-			windowHeight = Config.WINDOW_HEIGHT;
-			aspectRatio = Config.ASPECT_RATIO;	
-		}
-		if (currentAspectRatio > aspectRatio) {
-			currentScale = (float) height / windowHeight;
-			cropScreen.x = (width - windowWidth * currentScale) / 2f;
-		} else if (currentAspectRatio < aspectRatio) {
-			currentScale = (float) width / windowWidth;
-			cropScreen.y = (height - windowHeight * currentScale) / 2f;
-		} else {
-			currentScale = (float) (width / windowWidth);
+			currentScale = (float) width / (float) Config.WINDOW_WIDTH;
 		}
 		
-		float vievportWidth =  windowWidth * currentScale;
-		float vievportHeight = windowHeight * currentScale;
+		float vievportWidth =  Config.WINDOW_WIDTH * currentScale;
+		float vievportHeight = Config.WINDOW_HEIGHT * currentScale;
 		viewport = new Rectangle(cropScreen.x, cropScreen.y, vievportWidth, vievportHeight);
 		
 		super.resize(width, height);

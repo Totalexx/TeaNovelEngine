@@ -35,7 +35,7 @@ public class GameScreen implements Screen{
 		Assets.loadGUITexture("novelGUI.png");
 		Assets.waitLoadAsset();
 		
-		stage = new Stage(new FitViewport(Config.CAMERA_WIDTH, Config.CAMERA_HEIGHT, GameManager.camera));
+		stage = new Stage();
 		
 		background = new Background("background.jpg");
 		gui = new GUI("novelGUI.png", 0, 0, 100, 30);
@@ -44,12 +44,11 @@ public class GameScreen implements Screen{
 		textbox.initializeTextBox(5, 5, 95, 20, Color.WHITE);
 		textbox.setCharbyChar(true);
 		
-		name = new Textbox(20);
+		name = new Textbox(22);
 		name.initializeTextBox(5, 22, 95, 26, Color.WHITE);
 		name.setText("Кагоме");
 		
 		kagome = new Character("kagome.png", 50, 30);
-		kagome.setScale(1);
 		
 		stage.addActor(background);
 		stage.addActor(kagome);
@@ -57,7 +56,6 @@ public class GameScreen implements Screen{
 		stage.addActor(name);
 		stage.addActor(textbox);
 		stage.setDebugAll(Config.DEBUG);
-		System.out.print('\u0000');
 	}
 
 	public int i = 0;
