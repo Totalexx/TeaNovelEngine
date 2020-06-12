@@ -11,8 +11,6 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.4.1'
-        
-
     }
 }
 
@@ -23,7 +21,7 @@ allprojects {
     ext {
         appName = "TeaNovelEngine"
         gdxVersion = '1.9.10'
-        typingLabelVersion = '1.2.0'
+        regExodusVersion = '0.1.10'
     }
 
     repositories {
@@ -38,7 +36,6 @@ allprojects {
 
 project(":desktop") {
     apply plugin: "java-library"
-
 
     dependencies {
         implementation project(":core")
@@ -78,7 +75,7 @@ project(":core") {
 
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
+        api "com.github.tommyettinger:regexodus:$regExodusVersion"
         api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-        api "com.rafaskoberg.gdx:typing-label:$typingLabelVersion"
     }
 }

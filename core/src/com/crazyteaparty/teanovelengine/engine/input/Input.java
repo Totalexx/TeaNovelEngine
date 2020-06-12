@@ -2,6 +2,7 @@ package com.crazyteaparty.teanovelengine.engine.input;
 
 import com.badlogic.gdx.InputProcessor;
 import com.crazyteaparty.teanovelengine.engine.screen.GameScreen;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.crazyteaparty.teanovelengine.engine.input.InputEvents;
@@ -28,7 +29,6 @@ public class Input implements InputProcessor{
 
 	@Override
 	public boolean keyUp(int keycode) {
-		System.out.println();
 		return false;
 	}
 
@@ -45,12 +45,11 @@ public class Input implements InputProcessor{
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		switch (button) {
-		case Buttons.LEFT:
-			InputEvents.textSceneEvent(screen);
-			break;
-
-		default:
-			break;
+			case Buttons.LEFT:
+				InputEvents.textSceneEvent(screen);
+				break;	
+			default:
+				break;
 		}
 		return false;
 	}

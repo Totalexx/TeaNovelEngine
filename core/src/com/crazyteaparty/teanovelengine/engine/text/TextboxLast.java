@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.Align;
 import com.crazyteaparty.teanovelengine.engine.Config;
 import com.crazyteaparty.teanovelengine.engine.utils.ConvertSize;
-import com.rafaskoberg.gdx.typinglabel.TypingLabel;
 
 /**
  * Generates the textbox for drawing text in screen
@@ -23,17 +22,33 @@ import com.rafaskoberg.gdx.typinglabel.TypingLabel;
  * @author Vitaliy
  *
  */
-public class Textbox extends Actor{
+public class TextboxLast extends Actor{
 	
 	/** List of characters. */
 	protected String FONT_CHARS = "абвгдеёжзийклмнопрстуфхцчшщъыьэюяabcdefghijklmnopqrstuvwxyzАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮ"
 			+ "ЯABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"´`'<>\u2007";
 	/** Parameters for generation font. */
 	private FreeTypeFontParameter parameters;
-	/** Font for generation TypingLabelStyle. */
+	/** Font for generation LabelStyle. */
 	private BitmapFont font;
-	/** TypingLabel for drawing text. */
-	private TypingLabel label;
+	/** Label for drawing text. */
+	private Label label;
+	/** Draw text char by char*/
+	private boolean charByChar = false;
+	/** pause in drawing*/
+	private boolean pauseDraw = false;
+    /** End of draw*/
+	private boolean endDraw = false;
+	
+	private boolean skipCharByChar = false;
+	
+	private String currentText;
+	
+	private float currentSpeedDraw = 1f;
+	
+	private float saveSpeedDraw;
+	
+	private int iterationDraw = 0;
 	
 	/**
 	 * Used to drawing text
@@ -41,7 +56,7 @@ public class Textbox extends Actor{
 	 * 
 	 * @param fontSize
 	 */
-	public Textbox(int fontSize) {
+	public TextboxLast(int fontSize) {
 		parameters = new FreeTypeFontParameter();
 		parameters.characters = FONT_CHARS;
 		parameters.size = fontSize;
@@ -51,7 +66,7 @@ public class Textbox extends Actor{
 	}
 	
 	/**
-	 * Generates a font for create a TypingLabelStyle
+	 * Generates a font for create a LabelStyle
 	 * 
 	 * @param fontPathFile
 	 */
@@ -67,10 +82,10 @@ public class Textbox extends Actor{
 	 * 
 	 * @param text
 	 * @param color
-	 * @return TypingLabel
+	 * @return Label
 	 */
-	private TypingLabel generateTypingLabel(CharSequence text, Color color) {
-		label = new TypingLabel(text, new LabelStyle(font, color));
+	private Label generateLabel(CharSequence text, Color color) {
+		label = new Label(text, new LabelStyle(font, color));
 		return label;
 	}
 	
@@ -85,7 +100,7 @@ public class Textbox extends Actor{
 	 * @param color
 	 * @return
 	 */
-	public TypingLabel initializeTextBox(String fontPathFile, float x1, float y1, float x2, float y2, Color color){
+	public Label initializeTextBox(String fontPathFile, float x1, float y1, float x2, float y2, Color color){
 		return initializeTextBox(fontPathFile, 1f, 1f, 20f, x1, y1, x2, y2, color);
 	}
 	
@@ -99,7 +114,7 @@ public class Textbox extends Actor{
 	 * @param color
 	 * @return
 	 */
-	public TypingLabel initializeTextBox(float x1, float y1, float x2, float y2, Color color){
+	public Label initializeTextBox(float x1, float y1, float x2, float y2, Color color){
 		return initializeTextBox(Config.DEFAULT_FONT_PATH, x1, y1, x2, y2, color);
 	}
 	
@@ -111,9 +126,9 @@ public class Textbox extends Actor{
 	 * @param scaleY
 	 * @param lineHeight
 	 * @param color
-	 * @return TypingLabel
+	 * @return Label
 	 */
-	public TypingLabel initializeTextBox(String fontPathFile, float scaleX, float scaleY, float lineHeight, float x1, 
+	public Label initializeTextBox(String fontPathFile, float scaleX, float scaleY, float lineHeight, float x1, 
 			float y1, float x2, float y2, Color color){
 		return initializeTextBox(fontPathFile, "", scaleX, scaleY, lineHeight, x1, y1, x2, y2, color);
 	}
@@ -131,24 +146,19 @@ public class Textbox extends Actor{
 	 * @param x2
 	 * @param y2
 	 * @param color
-	 * @return TypingLabel
+	 * @return Label
 	 */
-	public TypingLabel initializeTextBox (String fontPathFile, CharSequence text, float scaleX, float scaleY, float lineHeight, float x1, 
+	public Label initializeTextBox (String fontPathFile, CharSequence text, float scaleX, float scaleY, float lineHeight, float x1, 
 			float y1, float x2, float y2, Color color) {
 		generateFont(fontPathFile);
 		font.getData().scaleY = scaleX;
 		font.getData().scaleY = scaleY;
 		font.getData().setLineHeight(lineHeight);
-		generateTypingLabel(text, color);
+		generateLabel(text, color);
 		setTextBox(x1, y1, x2, y2);
 		setWrap(true);
+		currentText = text.toString();
 		return label;
-	}
-	
-	@Override
-	public void act(float delta) {
-		label.act(delta);
-		super.act(delta);
 	}
 	
 	/**
@@ -160,15 +170,48 @@ public class Textbox extends Actor{
 	 */
 	@Override
 	public void draw (Batch batch, float parentAlpha) {
+		float indexChar;
+		int lengthText = currentText.length();
+		try {
+			indexChar = iterationDraw / currentSpeedDraw;
+		} catch (Exception e) {
+			indexChar = iterationDraw;
+		}
+		if(lengthText == (int) indexChar) {
+			endDraw = true;
+			if(skipCharByChar) {
+				currentSpeedDraw = saveSpeedDraw;
+			}
+		}
+		if(charByChar && !(endDraw || pauseDraw)) {
+			if(indexChar == (int) indexChar) {
+				label.setText(currentText.substring(0, (int) (indexChar + 1)) 
+						+ currentText.substring((int) (indexChar + 1), lengthText).replaceAll("\\S", "\u2007"));
+				char currentChar = currentText.charAt((int) indexChar);
+				if(currentChar == '.' || currentChar == '!' || currentChar == '?') {
+					pauseDraw = true;
+				}
+			}
+			if(skipCharByChar) {
+				label.setText(currentText);
+				endDraw = true;
+			}
+			iterationDraw++;
+		} else {
+			if(!(endDraw || pauseDraw)) {
+				label.setText(currentText);
+			}
+		}
 		label.draw(batch, parentAlpha);
 	}
 	
 	public void setSpeedDraw(float speedDraw) {
-		
+		this.currentSpeedDraw = speedDraw;
+		saveSpeedDraw = speedDraw;
 	}
 	
 	public void setCharbyChar(boolean charByChar) {
-		label.setDrawCharByChar(charByChar);
+		this.charByChar = charByChar;
 	}
 	
 	/**
@@ -253,21 +296,17 @@ public class Textbox extends Actor{
 		label.setScale(scale);
 	}
 	
-	public void skip() {
-		label.skipToTheEnd(false, false);
-	}
-	
-	public void setPause(boolean pause) {
-		label.setPaused(pause);
-	}
-	
 	/**
 	 * Sets the text
 	 * 
 	 * @param text
 	 */
 	public void setText(CharSequence text) {
-		label.restart(text);
+		currentText = text.toString();
+		endDraw = false;
+		pauseDraw = false;
+		skipCharByChar = false;
+		iterationDraw = 0;
 	}
 	
 	/**
@@ -288,29 +327,39 @@ public class Textbox extends Actor{
 	 * 
 	 */
 	public void setShadow(){
-		setShadow(Color.BLACK, 1, 1);
+		parameters.shadowColor = Color.BLACK;
+		parameters.shadowOffsetX = 1;
+		parameters.shadowOffsetY = 1;
 	}
 	
-	public void setDrawCharByChar(boolean drawCharByChar) {
-		label.setDrawCharByChar(drawCharByChar);
+	public void setPauseDraw(boolean pauseDraw) {
+		this.pauseDraw = pauseDraw;
 	}
 	
-	public boolean isDrawCharByChar() {
-		return label.isDrawCharByChar();
+	public void setEndDraw(boolean endDraw) {
+		this.endDraw = endDraw;
 	}
 	
-	public boolean hasEnded() {
-		return label.hasEnded();
+	public void setSkipCharByChar(boolean skipCharByChar) {
+		this.skipCharByChar = skipCharByChar;
 	}
 	
-	public boolean isPaused() {
-		return label.isPaused();
+	public boolean isSkipCharByChar() {
+		return skipCharByChar;
+	}
+	
+	public boolean isPauseDraw() {
+		return pauseDraw;
+	}
+	
+	public boolean isEndDraw() {
+		return endDraw;
 	}
 	
 	/**
 	 * Returns font
 	 * 
-	 * @return TypingLabel
+	 * @return Label
 	 */
 	public BitmapFont getFont(){
 		return font;
@@ -319,9 +368,9 @@ public class Textbox extends Actor{
 	/**
 	 * Returns label
 	 * 
-	 * @return TypingLabel
+	 * @return Label
 	 */
-	public TypingLabel getTypingLabel(){
+	public Label getLabel(){
 		return label;
 	}
 	

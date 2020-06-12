@@ -5,13 +5,13 @@ import com.crazyteaparty.teanovelengine.engine.screen.GameScreen;
 public abstract class InputEvents {
 
 	public static void textSceneEvent(GameScreen screen) {
-		if(screen.textbox.isEndDraw()) {
+		if(screen.textbox.hasEnded()) {
 			screen.i++;
 		} else {
-			if(screen.textbox.isPauseDraw()) {
-				screen.textbox.setPauseDraw(false);
+			if(screen.textbox.isPaused()) {
+				screen.textbox.setPause(false);
 			} else {
-				screen.textbox.setSkipCharByChar(true);
+				screen.textbox.skip();
 			}
 		}
 	}

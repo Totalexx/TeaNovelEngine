@@ -1,7 +1,5 @@
 package com.crazyteaparty.teanovelengine.engine.screen;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -47,14 +45,14 @@ public class GameScreen implements Screen{
 		textbox.setCharbyChar(true);
 		
 		name = new Textbox(20);
-		name.initializeTextBox(5, 22, 95, 26, Color.CYAN);
+		name.initializeTextBox(5, 22, 95, 26, Color.WHITE);
 		name.setText("Кагоме");
 		
 		kagome = new Character("kagome.png", 50, 30);
 		kagome.setScale(1);
 		
 		stage.addActor(background);
-		//stage.addActor(kagome);
+		stage.addActor(kagome);
 		stage.addActor(gui);
 		stage.addActor(name);
 		stage.addActor(textbox);
@@ -62,7 +60,7 @@ public class GameScreen implements Screen{
 		System.out.print('\u0000');
 	}
 
-	public static int i = 0;
+	public int i = 0;
 	int lastI = -1;
 	@Override
 	public void render(float delta) {
@@ -72,23 +70,28 @@ public class GameScreen implements Screen{
 				case 4:
 					i = 0;
 				case 0:
+					name.setText("{COLOR=CYAN}Каг{SHAKE}оме");
 					kagome.setRotation(0);
-					kagome.setFlipX(false);
-					textbox.setText("В 2016 году из-за крупного взлома банковских систем, правительство организовывает Федеральное бюро по киберпреступности, для борьбы с хакерами. ФБК имеет отдел по вычислению местоположения хакеров, отдел по задержанию, отдел допросов и отдел по предотвращению взломов и атак.");
+					textbox.setText("{FADE}В 2016 году из-за крупного взлома банковских систем, правительство организовывает Федеральное бюро по киберпреступности, для борьбы с хакерами. ФБК имеет отдел по вычислению местоположения хакеров, отдел по задержанию, отдел допросов и отдел по предотвращению взломов и атак.");
 					background.setTexture("background.jpg");
 					break;
 				case 1:
+					name.setText("Николай");
 					textbox.setText("Шёл 2035-ый год. Благодаря исследованиям в области нейробиологии, компания “CyberVR(название временное)” разработала технологию полного погружения в виртуальную реальность. Специальный нейрошлем, способный погружать человека в осознанный сон. Благодаря этому состоянию сна, пользователь может в полной мере ощущать присутствие в VR.");
 					kagome.setFlipX(true);
 					background.setTexture("background2.jpg");
 					break;
 				case 2:
+					name.setText("Игорь");
 					textbox.setText("А теперь наклоны.");
 					kagome.setRotation(20f);
 					background.setTexture("background3.jpg");
 					break;
 				case 3:
-					textbox.setText("Огурцы!");
+					name.setText("{COLOR=YELLOW}Кагоме");
+					kagome.setFlipX(false);
+					kagome.setRotation(0f);
+					textbox.setText("{COLOR=YELLOW}{SHAKE}БЛИНЧИКИ!!!");
 					background.setTexture("background4.jpg");
 					break;
 			}
