@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.crazyteaparty.teanovelengine.engine.Config;
 import com.crazyteaparty.teanovelengine.engine.GameManager;
 import com.crazyteaparty.teanovelengine.engine.file.Assets;
+import com.crazyteaparty.teanovelengine.engine.script.Interpreter;
 import com.crazyteaparty.teanovelengine.engine.sprite.Background;
 import com.crazyteaparty.teanovelengine.engine.sprite.Character;
 import com.crazyteaparty.teanovelengine.engine.sprite.GUI;
@@ -23,6 +24,8 @@ public class GameScreen implements Screen{
 	Textbox name;
 	
 	Stage stage;
+	
+	Interpreter interpreter;
 		
 	
 	@Override
@@ -56,6 +59,7 @@ public class GameScreen implements Screen{
 		stage.addActor(name);
 		stage.addActor(textbox);
 		stage.setDebugAll(Config.DEBUG);
+		interpreter = new Interpreter(stage, textbox);
 	}
 
 	public int i = 0;
@@ -70,18 +74,24 @@ public class GameScreen implements Screen{
 				case 0:
 					name.setText("{COLOR=CYAN}Каг{SHAKE}оме");
 					kagome.setRotation(0);
-					textbox.setText("{FADE}В 2016 году из-за крупного взлома банковских систем, правительство организовывает Федеральное бюро по киберпреступности, для борьбы с хакерами. ФБК имеет отдел по вычислению местоположения хакеров, отдел по задержанию, отдел допросов и отдел по предотвращению взломов и атак.");
+					interpreter.disassemble("say(\"{FADE}В 2016 году из-за крупного взлома банковских систем,"
+							+ " правительство организовывает Федеральное бюро по киберпреступности,"
+							+ " для борьбы с хакерами. ФБК имеет отдел по вычислению местоположения хакеров,"
+							+ " отдел по задержанию, отдел допросов и отдел по предотвращению взломов и атак.\");");
 					background.setTexture("background.jpg");
 					break;
 				case 1:
 					name.setText("Николай");
-					textbox.setText("Шёл 2035-ый год. Благодаря исследованиям в области нейробиологии, компания “CyberVR(название временное)” разработала технологию полного погружения в виртуальную реальность. Специальный нейрошлем, способный погружать человека в осознанный сон. Благодаря этому состоянию сна, пользователь может в полной мере ощущать присутствие в VR.");
+					interpreter.disassemble("say(\"Шёл 2035-ый год. Благодаря исследованиям в области нейробиологии, компания"
+							+ " “CyberVR(название временное)” разработала технологию полного погружения в виртуальную реальность."
+							+ " Специальный нейрошлем, способный погружать человека в осознанный сон. "
+							+ "Благодаря этому состоянию сна, пользователь может в полной мере ощущать присутствие в VR.\");");
 					kagome.setFlipX(true);
 					background.setTexture("background2.jpg");
 					break;
 				case 2:
 					name.setText("Игорь");
-					textbox.setText("А теперь наклоны.");
+					interpreter.disassemble("say(\"А теперь наклоны.\");");
 					kagome.setRotation(20f);
 					background.setTexture("background3.jpg");
 					break;
@@ -89,10 +99,11 @@ public class GameScreen implements Screen{
 					name.setText("{COLOR=YELLOW}Кагоме");
 					kagome.setFlipX(false);
 					kagome.setRotation(0f);
-					textbox.setText("{COLOR=YELLOW}{SHAKE}БЛИНЧИКИ!!!");
+					interpreter.disassemble("say(\"{COLOR=YELLOW}{SHAKE}БЛИНЧИКИ!!!\");");
 					background.setTexture("background4.jpg");
 					break;
 			}
+			interpreter.MethodCall();
 		}
 		stage.act(delta);
 		stage.draw();
