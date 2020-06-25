@@ -39,6 +39,10 @@ public abstract class Config{
 	public static final String PATH_TO_IMAGES_CHARACTERS = "images/characters/";
 	/** Path to background image folder. */
 	public static final String PATH_TO_IMAGES_BACKGROUNDS = "images/backgrounds/";
+	/** Path to sounds folder. */
+	public static final String PATH_TO_SOUNDS = "audio/sounds/";
+	/** Path to music folder. */
+	public static final String PATH_TO_MUSIC = "audio/music/";
 	
 	/** This code be executed at startup. */
 	public static void setConfiguration() {

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.DistanceFieldFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.crazyteaparty.teanovelengine.engine.GameManager;
+import com.crazyteaparty.teanovelengine.engine.audio.GameMusic;
 import com.crazyteaparty.teanovelengine.engine.script.Interpreter;
 import com.crazyteaparty.teanovelengine.engine.sprite.Background;
 import com.crazyteaparty.teanovelengine.engine.sprite.Character;
@@ -25,7 +26,8 @@ public class GameScreen implements Screen{
 	Stage stage;
 	
 	Interpreter interpreter;
-		
+	
+	GameMusic bl;
 	
 	@Override
 	public void show() {
@@ -36,6 +38,9 @@ public class GameScreen implements Screen{
 		GameManager.assets.loadCharacter("kagome.png");
 		GameManager.assets.loadGUITexture("novelGUI.png");
 		GameManager.assets.finishLoading();
+		
+		bl = new GameMusic("EndlessSummer.mp3");
+		bl.play(100);
 		
 		stage = new Stage(GameManager.viewport);
 		
