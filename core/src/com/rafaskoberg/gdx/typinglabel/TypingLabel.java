@@ -33,7 +33,7 @@ public class TypingLabel extends Label {
     private final   ObjectMap<String, String> variables    = new ObjectMap<String, String>();
     protected final Array<TokenEntry>         tokenEntries = new Array<TokenEntry>();
 
-    // Config
+    // GameConfig
     private Color          clearColor = new Color(TypingConfig.DEFAULT_CLEAR_COLOR);
     private TypingListener listener   = null;
     boolean forceMarkupColor = TypingConfig.FORCE_COLOR_MARKUP_BY_DEFAULT;
@@ -430,7 +430,7 @@ public class TypingLabel extends Label {
     /** Proccess char progression according to current cooldown and process all tokens in the current index. */
     private void processCharProgression() {
         // Keep a counter of how many chars we're processing in this tick.
-        int charCounter = 0;
+        //int charCounter = 0;
         
         // Process chars while there's room for it
         while(skipping || charCooldown < 0.0f) {

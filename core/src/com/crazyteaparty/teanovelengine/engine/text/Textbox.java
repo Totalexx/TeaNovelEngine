@@ -1,18 +1,14 @@
 package com.crazyteaparty.teanovelengine.engine.text;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.graphics.g2d.DistanceFieldFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.Align;
-import com.crazyteaparty.teanovelengine.engine.Config;
+import com.crazyteaparty.teanovelengine.engine.GameManager;
 import com.crazyteaparty.teanovelengine.engine.utils.ConvertSize;
+import com.crazyteaparty.teanovelengine.game.Config;
 import com.rafaskoberg.gdx.typinglabel.TypingLabel;
 
 /**
@@ -20,46 +16,44 @@ import com.rafaskoberg.gdx.typinglabel.TypingLabel;
  * 
  * @version 1.0
  * 
- * @author Vitaliy
+ * @author Vitaliy Popov
  *
  */
-public class Textbox extends Actor{
+public  class Textbox extends Actor{
 	
-	/** List of characters. */
-	protected String FONT_CHARS = "абвгдеёжзийклмнопрстуфхцчшщъыьэюяabcdefghijklmnopqrstuvwxyzАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮ"
-			+ "ЯABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"´`'<>\u2007";
-	/** Parameters for generation font. */
-	private FreeTypeFontParameter parameters;
 	/** Font for generation TypingLabelStyle. */
-	private BitmapFont font;
+	private DistanceFieldFont font;
 	/** TypingLabel for drawing text. */
 	private TypingLabel label;
 	
-	/**
-	 * Used to drawing text
-	 * After use initializeText() to generate a textbox
-	 * 
-	 * @param fontSize
-	 */
-	public Textbox(int fontSize) {
-		parameters = new FreeTypeFontParameter();
-		parameters.characters = FONT_CHARS;
-		parameters.size = fontSize;
-		parameters.magFilter = TextureFilter.Linear;
-		parameters.minFilter = TextureFilter.Linear;
-		parameters.genMipMaps = true;
+	public Textbox (String fontPathFile, CharSequence text, float fontSize, float x1, float y1, float x2, float y2, Color color) {
+		generateFont(fontPathFile, fontSize);
+		generateTypingLabel(text, color);
+		setTextBox(x1, y1, x2, y2);
+		setWrap(true);
+		label.setFontScale(fontSize);
+	}
+	
+	public Textbox (CharSequence text, float fontSize, float x1, float y1, float x2, float y2, Color color) {
+		this(Config.DEFAULT_FONT_NAME, text, fontSize, x1, y1, x2, y2, color);
+	}
+	
+	public Textbox (float fontSize, float x1, float y1, float x2, float y2, Color color) {
+		this(Config.DEFAULT_FONT_NAME, "", fontSize, x1, y1, x2, y2, color);
 	}
 	
 	/**
-	 * Generates a font for create a TypingLabelStyle
+	 * Create a font for create a LabelStyle
 	 * 
 	 * @param fontPathFile
 	 */
-	private void generateFont(String fontPathFile) {
-		FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal(Config.PATH_TO_FONT + fontPathFile));
-		font = fontGenerator.generateFont(parameters);
-		font.getData().markupEnabled = true;
-		fontGenerator.dispose();
+	private void generateFont(String fontPathFile, float fontSize) {
+		GameManager.assets.loadFont(Config.PATH_TO_FONT + fontPathFile + ".fnt");
+		GameManager.assets.finishLoading();
+		font = GameManager.assets.getFont(Config.PATH_TO_FONT + fontPathFile + ".fnt");
+		font.setDistanceFieldSmoothing(2.5f);
+		//font.getData().setScale(fontSize);
+		//System.out.println(font.getScaleX());
 	}
 	
 	/**
@@ -70,78 +64,8 @@ public class Textbox extends Actor{
 	 * @return TypingLabel
 	 */
 	private TypingLabel generateTypingLabel(CharSequence text, Color color) {
-		label = new TypingLabel(text, new LabelStyle(font, color));
-		return label;
-	}
-	
-	/**
-	 * Generates the textbox for draw.
-	 * 
-	 * @param fontPathFile
-	 * @param x1
-	 * @param y1
-	 * @param x2
-	 * @param y2
-	 * @param color
-	 * @return
-	 */
-	public TypingLabel initializeTextBox(String fontPathFile, float x1, float y1, float x2, float y2, Color color){
-		return initializeTextBox(fontPathFile, 1f, 1f, 20f, x1, y1, x2, y2, color);
-	}
-	
-	/**
-	 * Generates the textbox for draw.
-	 * 
-	 * @param x1
-	 * @param y1
-	 * @param x2
-	 * @param y2
-	 * @param color
-	 * @return
-	 */
-	public TypingLabel initializeTextBox(float x1, float y1, float x2, float y2, Color color){
-		return initializeTextBox(Config.DEFAULT_FONT_PATH, x1, y1, x2, y2, color);
-	}
-	
-	/**
-	 * Generates the textbox for draw.
-	 * 
-	 * @param fontPathFile
-	 * @param scaleX
-	 * @param scaleY
-	 * @param lineHeight
-	 * @param color
-	 * @return TypingLabel
-	 */
-	public TypingLabel initializeTextBox(String fontPathFile, float scaleX, float scaleY, float lineHeight, float x1, 
-			float y1, float x2, float y2, Color color){
-		return initializeTextBox(fontPathFile, "", scaleX, scaleY, lineHeight, x1, y1, x2, y2, color);
-	}
-	
-	/**
-	 * Generates the textbox for draw.
-	 * 
-	 * @param fontPathFile
-	 * @param text
-	 * @param scaleX
-	 * @param scaleY
-	 * @param lineHeight
-	 * @param x1
-	 * @param y1
-	 * @param x2
-	 * @param y2
-	 * @param color
-	 * @return TypingLabel
-	 */
-	public TypingLabel initializeTextBox (String fontPathFile, CharSequence text, float scaleX, float scaleY, float lineHeight, float x1, 
-			float y1, float x2, float y2, Color color) {
-		generateFont(fontPathFile);
-		font.getData().scaleY = scaleX;
-		font.getData().scaleY = scaleY;
-		font.getData().setLineHeight(lineHeight);
-		generateTypingLabel(text, color);
-		setTextBox(x1, y1, x2, y2);
-		setWrap(true);
+		LabelStyle labelStyle = new LabelStyle(font, Color.WHITE);
+		label = new TypingLabel(text, labelStyle);
 		return label;
 	}
 	
@@ -161,6 +85,10 @@ public class Textbox extends Actor{
 	@Override
 	public void draw (Batch batch, float parentAlpha) {
 		label.draw(batch, parentAlpha);
+	}
+	
+	public void setBorder () {
+		
 	}
 	
 	public void setSpeedDraw(float speedDraw) {
@@ -270,27 +198,6 @@ public class Textbox extends Actor{
 		label.restart(text);
 	}
 	
-	/**
-	 * Sets the shadow for text
-	 * 
-	 * @param shadowColor
-	 * @param shadowOffsetX
-	 * @param shadowOffsetY
-	 */
-	public void setShadow(Color shadowColor, int shadowOffsetX, int shadowOffsetY){
-		parameters.shadowColor = shadowColor;
-		parameters.shadowOffsetX = shadowOffsetX;
-		parameters.shadowOffsetY = shadowOffsetY;
-	}
-	
-	/**
-	 * Sets the shadow for text
-	 * 
-	 */
-	public void setShadow(){
-		setShadow(Color.BLACK, 1, 1);
-	}
-	
 	public void setDrawCharByChar(boolean drawCharByChar) {
 		label.setDrawCharByChar(drawCharByChar);
 	}
@@ -312,7 +219,7 @@ public class Textbox extends Actor{
 	 * 
 	 * @return TypingLabel
 	 */
-	public BitmapFont getFont(){
+	public DistanceFieldFont getFont(){
 		return font;
 	}
 	
@@ -325,12 +232,4 @@ public class Textbox extends Actor{
 		return label;
 	}
 	
-	/** Returns FreeTypeFontParameter to generate a font. 
-	 *  Use before calling initializeText()
-	 * 
-	 * @return FreeTypeFontParameter
-	 */
-	public FreeTypeFontParameter getFontParameters(){
-		return parameters;
-	}
 }
