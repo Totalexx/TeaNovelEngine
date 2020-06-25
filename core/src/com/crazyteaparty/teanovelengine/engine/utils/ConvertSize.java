@@ -1,40 +1,39 @@
 package com.crazyteaparty.teanovelengine.engine.utils;
 
-import com.badlogic.gdx.Gdx;
-import com.crazyteaparty.teanovelengine.engine.Config;
+import com.crazyteaparty.teanovelengine.game.Config;
 
 public abstract class ConvertSize {
 
-	public static float virtualXToReal(float x) {
-		return x / Config.VIRTUAL_WIDTH * (float)Gdx.graphics.getWidth();
+	public static float virtualXToReal (float x) {
+		return (float) Config.SCENE_WIDTH * x / (float) Config.VIRTUAL_WIDTH;
 	}
 	
-	public static float virtualYToReal(float y) {
-		return y / Config.VIRTUAL_HEIGHT * (float)Gdx.graphics.getHeight();
+	public static float virtualYToReal (float y) {
+		return (float) Config.SCENE_HEIGHT * y / (float) Config.VIRTUAL_HEIGHT;
 	}
 	
-	public static float virtualWidthToReal(float width) {
+	public static float virtualWidthToReal (float width) {
 		return virtualXToReal(width);
 	}
 	
-	public static float virtualHeightToReal(float height) {
+	public static float virtualHeightToReal (float height) {
 		return virtualYToReal(height);
 	}
 	
-	public static float realXToVirtual(float x) {
-		return x * Config.VIRTUAL_WIDTH / (float)Gdx.graphics.getWidth();
+	public static float realXToVirtual (float x) {
+		return (float) Config.VIRTUAL_WIDTH * x / (float) Config.SCENE_WIDTH;
 	}
 	
-	public static float realYToVirtual(float y) {
-		return y * Config.VIRTUAL_HEIGHT / (float)Gdx.graphics.getHeight();
+	public static float realYToVirtual (float y) {
+		return (float) Config.VIRTUAL_HEIGHT * y / (float) Config.SCENE_HEIGHT;
 	}
 	
-	public static float realWidthToVirtual(float width) {
-		return width * Config.VIRTUAL_WIDTH / (float)Gdx.graphics.getWidth();
+	public static float realWidthToVirtual (float width) {
+		return realXToVirtual(width);
 	}
 	
-	public static float realHeightToVirtual(float height) {
-		return height * Config.VIRTUAL_HEIGHT / (float)Gdx.graphics.getHeight();
+	public static float realHeightToVirtual (float height) {
+		return realXToVirtual(height);
 	}
 	
 }
