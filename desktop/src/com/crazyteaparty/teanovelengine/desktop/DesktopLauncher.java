@@ -3,7 +3,7 @@ package com.crazyteaparty.teanovelengine.desktop;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.crazyteaparty.teanovelengine.engine.Main;
-import com.crazyteaparty.teanovelengine.engine.Config;
+import com.crazyteaparty.teanovelengine.game.Config;
 
 public class DesktopLauncher {
 	

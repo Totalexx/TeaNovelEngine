@@ -1,6 +1,6 @@
 package com.crazyteaparty.teanovelengine.engine.sprite;
 
-import com.crazyteaparty.teanovelengine.engine.Config;
+import com.crazyteaparty.teanovelengine.game.Config;
 
 public class Background extends Sprites{
 
