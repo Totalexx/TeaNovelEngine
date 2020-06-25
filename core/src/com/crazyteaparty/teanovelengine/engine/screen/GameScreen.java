@@ -2,21 +2,20 @@ package com.crazyteaparty.teanovelengine.engine.screen;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.DistanceFieldFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.crazyteaparty.teanovelengine.engine.Config;
 import com.crazyteaparty.teanovelengine.engine.GameManager;
-import com.crazyteaparty.teanovelengine.engine.file.Assets;
 import com.crazyteaparty.teanovelengine.engine.script.Interpreter;
 import com.crazyteaparty.teanovelengine.engine.sprite.Background;
 import com.crazyteaparty.teanovelengine.engine.sprite.Character;
-import com.crazyteaparty.teanovelengine.engine.sprite.GUI;
+import com.crazyteaparty.teanovelengine.engine.sprite.GUISprite;
 import com.crazyteaparty.teanovelengine.engine.text.Textbox;
+import com.crazyteaparty.teanovelengine.game.Config;
 
 public class GameScreen implements Screen{
 	 
 	Background background;
-	GUI gui;
+	GUISprite gui;
 	
 	Character kagome;
 	
@@ -30,26 +29,23 @@ public class GameScreen implements Screen{
 	
 	@Override
 	public void show() {
-		Assets.loadBackground("background.jpg");
-		Assets.loadBackground("background2.jpg");
-		Assets.loadBackground("background3.jpg");
-		Assets.loadBackground("background4.jpg");
-		Assets.loadCharacter("kagome.png");
-		Assets.loadGUITexture("novelGUI.png");
-		Assets.waitLoadAsset();
+		GameManager.assets.loadBackground("background.jpg");
+		GameManager.assets.loadBackground("background2.jpg");
+		GameManager.assets.loadBackground("background3.jpg");
+		GameManager.assets.loadBackground("background4.jpg");
+		GameManager.assets.loadCharacter("kagome.png");
+		GameManager.assets.loadGUITexture("novelGUI.png");
+		GameManager.assets.finishLoading();
 		
-		stage = new Stage();
+		stage = new Stage(GameManager.viewport);
 		
 		background = new Background("background.jpg");
-		gui = new GUI("novelGUI.png", 0, 0, 100, 30);
+		gui = new GUISprite("novelGUI.png", 0, 0, 100, 30);
 		
-		textbox = new Textbox(18);
-		textbox.initializeTextBox(5, 5, 95, 20, Color.WHITE);
+		textbox = new Textbox(0.7f, 5, 5, 95, 20, Color.WHITE);
 		textbox.setCharbyChar(true);
 		
-		name = new Textbox(22);
-		name.initializeTextBox(5, 22, 95, 26, Color.WHITE);
-		name.setText("Кагоме");
+		name = new Textbox(1f, 5, 22, 95, 26, Color.WHITE);
 		
 		kagome = new Character("kagome.png", 50, 30);
 		
@@ -60,6 +56,7 @@ public class GameScreen implements Screen{
 		stage.addActor(textbox);
 		stage.setDebugAll(Config.DEBUG);
 		interpreter = new Interpreter(stage, textbox);
+		stage.getBatch().setShader(DistanceFieldFont.createDistanceFieldShader());
 	}
 
 	public int i = 0;
@@ -72,7 +69,7 @@ public class GameScreen implements Screen{
 				case 4:
 					i = 0;
 				case 0:
-					name.setText("{COLOR=CYAN}Каг{SHAKE}оме");
+					name.setText("{COLOR=CYAN}Кагоме{SHAKE}");
 					kagome.setRotation(0);
 					interpreter.disassemble("say(\"{FADE}В 2016 году из-за крупного взлома банковских систем,"
 							+ " правительство организовывает Федеральное бюро по киберпреступности,"
@@ -111,7 +108,7 @@ public class GameScreen implements Screen{
 
 	@Override
 	public void resize(int width, int height) {
-		
+		stage.getViewport().update(width, height);
 	}
 
 	@Override

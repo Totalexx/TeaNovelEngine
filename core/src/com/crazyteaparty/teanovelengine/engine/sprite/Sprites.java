@@ -3,7 +3,7 @@ package com.crazyteaparty.teanovelengine.engine.sprite;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.crazyteaparty.teanovelengine.engine.file.Assets;
+import com.crazyteaparty.teanovelengine.engine.GameManager;
 import com.crazyteaparty.teanovelengine.engine.utils.ConvertSize;
 
 public abstract class Sprites extends Actor{
@@ -11,17 +11,17 @@ public abstract class Sprites extends Actor{
 	protected Sprite sprite;
 	
 	public Sprites(String texturePathFile) {
-		sprite = new Sprite(Assets.getTexture(texturePathFile));
+		sprite = new Sprite(GameManager.assets.getTexture(texturePathFile));
 	}
 	
 	public Sprites(String texturePathFile, int x, int y, int width, int height) {
-		sprite = new Sprite(Assets.getTexture(texturePathFile));
+		sprite = new Sprite(GameManager.assets.getTexture(texturePathFile));
 		setBounds(x, y, width, height);
 		sprite.setOrigin(0, 0);
 	}
 	
 	public Sprites(String texturePathFile, float x, float y, float width, float height) {
-		sprite = new Sprite(Assets.getTexture(texturePathFile));
+		sprite = new Sprite(GameManager.assets.getTexture(texturePathFile));
 		x = ConvertSize.virtualXToReal(x);
 		y = ConvertSize.virtualYToReal(y);
 		super.setBounds(x, y, width, height);
@@ -35,7 +35,7 @@ public abstract class Sprites extends Actor{
 	}
 	
 	public void setTexture(String texturePathFile){
-		sprite.setTexture(Assets.getTexture(texturePathFile));
+		sprite.setTexture(GameManager.assets.getTexture(texturePathFile));
 	}
 	
 	@Override
@@ -58,6 +58,14 @@ public abstract class Sprites extends Actor{
 	public void setScale(float scaleX, float scaleY){
 		super.setScale(scaleX, scaleY);
 		sprite.setScale(scaleX, scaleY);
+	}
+	
+	@Override
+	public void setPosition(float x, float y) {
+		x = ConvertSize.virtualXToReal(x);
+		y = ConvertSize.virtualYToReal(y);
+		super.setPosition(x, y);
+		sprite.setPosition(x, y);
 	}
 	
 	@Override
