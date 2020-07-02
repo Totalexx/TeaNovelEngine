@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectMap.Entry;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
+import com.crazyteaparty.teanovelengine.engine.audio.GameSound;
 
 /**
  * An extension of {@link Label} that progressively shows the text as if it was being typed in real time, and allows the
@@ -430,7 +431,7 @@ public class TypingLabel extends Label {
     /** Proccess char progression according to current cooldown and process all tokens in the current index. */
     private void processCharProgression() {
         // Keep a counter of how many chars we're processing in this tick.
-        //int charCounter = 0;
+        int charCounter = 0;
         
         // Process chars while there's room for it
         while(skipping || charCooldown < 0.0f) {
@@ -462,6 +463,7 @@ public class TypingLabel extends Label {
             }
 
             // If char progression is finished, or if text is empty, notify listener and abort routine
+
             int textLen = getText().length;
             if((textLen == 0 || rawCharIndex >= textLen)) {
                 if(!ended) {
@@ -477,9 +479,6 @@ public class TypingLabel extends Label {
             if(layoutLineBreaks.contains(glyphCharIndex)) {
                 layoutLineBreaks.removeValue(glyphCharIndex);
                 isLayoutLineBreak = true;
-            }
-            if(!drawCharByChar) {
-            	skipToTheEnd(false, false);
             }
             // Increase glyph char index for all characters, except new lines.
             if(rawCharIndex >= 0 && primitiveChar != '\n' && !isLayoutLineBreak) glyphCharIndex++;
@@ -546,7 +545,7 @@ public class TypingLabel extends Label {
             }
            
              // Notify listener about char progression
-            /*int nextIndex = rawCharIndex == 0 ? 0 : MathUtils.clamp(rawCharIndex, 0, getText().length - 1);
+            int nextIndex = rawCharIndex == 0 ? 0 : MathUtils.clamp(rawCharIndex, 0, getText().length - 1);
             Character nextChar = nextIndex == 0 ? null : getText().charAt(nextIndex);
             if(nextChar != null && listener != null) {
                 listener.onChar(nextChar);
@@ -567,7 +566,7 @@ public class TypingLabel extends Label {
             if(!skipping && charLimit > 0 && charCounter > charLimit) {
                 charCooldown = Math.max(charCooldown, textSpeed);
                 break;
-            }*/
+            }
         }
     }
 
@@ -792,23 +791,26 @@ public class TypingLabel extends Label {
         }
 
         // Remove exceeding glyphs from original array
-        int glyphCountdown = glyphCharIndex;
-        for(int i = 0; i < runs.size; i++) {
-            Array<Glyph> glyphs = runs.get(i).glyphs;
-            if(glyphs.size < glyphCountdown) {
-                glyphCountdown -= glyphs.size;
-                continue;
-            }
-
-            for(int j = 0; j < glyphs.size; j++) {
-                if(glyphCountdown < 0) {
-                    glyphs.removeRange(j, glyphs.size - 1);
-                    break;
-                }
-                glyphCountdown--;
-            }
+        if(drawCharByChar) {
+		    int glyphCountdown = glyphCharIndex;
+		    for(int i = 0; i < runs.size; i++) {
+		        Array<Glyph> glyphs = runs.get(i).glyphs;
+		        if(glyphs.size < glyphCountdown) {
+		            glyphCountdown -= glyphs.size;
+		            continue;
+		        }
+		
+		        for(int j = 0; j < glyphs.size; j++) {
+		            if(glyphCountdown < 0) {
+		                glyphs.removeRange(j, glyphs.size - 1);
+		                break;
+		            }
+		            glyphCountdown--;
+		        }
+		    }
+        } else {
+        	skipToTheEnd(false, false);
         }
-
         // Pass new layout with custom glyphs to BitmapFontCache
         cache.setText(layout, lastLayoutX, lastLayoutY);
     }
