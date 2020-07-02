@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.DistanceFieldFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.crazyteaparty.teanovelengine.engine.GameManager;
 import com.crazyteaparty.teanovelengine.engine.audio.GameMusic;
+import com.crazyteaparty.teanovelengine.engine.audio.GameSound;
 import com.crazyteaparty.teanovelengine.engine.script.Interpreter;
 import com.crazyteaparty.teanovelengine.engine.sprite.Background;
 import com.crazyteaparty.teanovelengine.engine.sprite.Character;
@@ -28,6 +29,9 @@ public class GameScreen implements Screen{
 	Interpreter interpreter;
 	
 	GameMusic bl;
+	GameMusic sg;
+	GameMusic sg0;
+	GameSound keybord;
 	
 	@Override
 	public void show() {
@@ -37,10 +41,11 @@ public class GameScreen implements Screen{
 		GameManager.assets.loadBackground("background4.jpg");
 		GameManager.assets.loadCharacter("kagome.png");
 		GameManager.assets.loadGUITexture("novelGUI.png");
-		GameManager.assets.finishLoading();
-		
 		bl = new GameMusic("EndlessSummer.mp3");
-		bl.play(100);
+		sg = new GameMusic("Steins;Gate.mp3");
+		sg0 = new GameMusic("steins;gate0.mp3");
+		keybord = new GameSound("key.mp3");
+		GameManager.assets.finishLoading();
 		
 		stage = new Stage(GameManager.viewport);
 		
@@ -66,13 +71,35 @@ public class GameScreen implements Screen{
 
 	public int i = 0;
 	int lastI = -1;
+	int idMusic = 0;
 	@Override
 	public void render(float delta) {
-		if(i != lastI){
+		if (i != lastI){
+			
 			lastI = i;
-			switch(i) {
+			switch (idMusic) {
+				case 3:
+					idMusic = 0;
+				case 0:
+					bl.play(30);
+					sg.stop();
+					sg0.stop();
+					break;
+				case 1:
+					sg.play(10);
+					bl.stop();
+					sg0.stop();
+					break;
+				case 2:
+					sg0.play(30);
+					bl.stop();
+					sg.stop();
+					break;
+			}
+			switch (i) {
 				case 4:
 					i = 0;
+					idMusic++;
 				case 0:
 					name.setText("{COLOR=CYAN}Кагоме{SHAKE}");
 					kagome.setRotation(0);

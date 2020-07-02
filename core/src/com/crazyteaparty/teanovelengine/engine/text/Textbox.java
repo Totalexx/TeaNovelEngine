@@ -7,8 +7,10 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.Align;
 import com.crazyteaparty.teanovelengine.engine.GameManager;
+import com.crazyteaparty.teanovelengine.engine.audio.GameMusic;
 import com.crazyteaparty.teanovelengine.engine.utils.ConvertSize;
 import com.crazyteaparty.teanovelengine.game.Config;
+import com.rafaskoberg.gdx.typinglabel.TypingConfig;
 import com.rafaskoberg.gdx.typinglabel.TypingLabel;
 
 /**
@@ -21,17 +23,29 @@ import com.rafaskoberg.gdx.typinglabel.TypingLabel;
  */
 public  class Textbox extends Actor{
 	
-	/** Font for generation TypingLabelStyle. */
+	/** Font for generation LabelStyle. */
 	private DistanceFieldFont font;
 	/** TypingLabel for drawing text. */
 	private TypingLabel label;
 	
-	public Textbox (String fontPathFile, CharSequence text, float fontSize, float x1, float y1, float x2, float y2, Color color) {
-		generateFont(fontPathFile, fontSize);
-		generateTypingLabel(text, color);
+	private GameMusic keyboard = new GameMusic("key.mp3");
+	
+	/***
+	 * 
+	 * @param fontName
+	 * @param text
+	 * @param fontSize
+	 * @param position x1
+	 * @param position y1
+	 * @param position x2
+	 * @param position y2
+	 * @param fontColor
+	 */
+	public Textbox (String fontName, CharSequence text, float fontSize, float x1, float y1, float x2, float y2, Color fontColor) {
+		generateFont(fontName);
+		generateTypingLabel(text, fontSize, fontColor);
 		setTextBox(x1, y1, x2, y2);
 		setWrap(true);
-		label.setFontScale(fontSize);
 	}
 	
 	public Textbox (CharSequence text, float fontSize, float x1, float y1, float x2, float y2, Color color) {
@@ -45,15 +59,13 @@ public  class Textbox extends Actor{
 	/**
 	 * Create a font for create a LabelStyle
 	 * 
-	 * @param fontPathFile
+	 * @param fontName
 	 */
-	private void generateFont(String fontPathFile, float fontSize) {
-		GameManager.assets.loadFont(Config.PATH_TO_FONT + fontPathFile + ".fnt");
+	private void generateFont(String fontName) {
+		GameManager.assets.loadFont(Config.PATH_TO_FONT + fontName + ".fnt");
 		GameManager.assets.finishLoading();
-		font = GameManager.assets.getFont(Config.PATH_TO_FONT + fontPathFile + ".fnt");
+		font = GameManager.assets.getFont(Config.PATH_TO_FONT + fontName + ".fnt");
 		font.setDistanceFieldSmoothing(2.5f);
-		//font.getData().setScale(fontSize);
-		//System.out.println(font.getScaleX());
 	}
 	
 	/**
@@ -63,13 +75,18 @@ public  class Textbox extends Actor{
 	 * @param color
 	 * @return TypingLabel
 	 */
-	private TypingLabel generateTypingLabel(CharSequence text, Color color) {
-		LabelStyle labelStyle = new LabelStyle(font, Color.WHITE);
+	private TypingLabel generateTypingLabel(CharSequence text, float fontSize, Color fontColor) {
+		LabelStyle labelStyle = new LabelStyle(font, fontColor);
 		label = new TypingLabel(text, labelStyle);
+		label.setFontScale(fontSize);
 		return label;
 	}
 	
+	
 	@Override
+	/**
+	 * 
+	 */
 	public void act(float delta) {
 		label.act(delta);
 		super.act(delta);
@@ -84,7 +101,15 @@ public  class Textbox extends Actor{
 	 */
 	@Override
 	public void draw (Batch batch, float parentAlpha) {
+		
 		label.draw(batch, parentAlpha);
+		if(label.isDrawCharByChar()){ 
+			if(!label.hasEnded()) {
+				keyboard.play(100);
+			} else {
+				keyboard.stop();
+			}
+		}
 	}
 	
 	public void setBorder () {
@@ -92,9 +117,18 @@ public  class Textbox extends Actor{
 	}
 	
 	public void setSpeedDraw(float speedDraw) {
-		
+		if(TypingConfig.DEFAULT_SPEED_PER_CHAR == 0f){
+        	System.out.println("[Textbox] Speed can't be zero");
+        } else {
+        	TypingConfig.DEFAULT_SPEED_PER_CHAR = speedDraw;
+        }
 	}
 	
+	/**
+	 * sets the character by character mode 
+	 * 
+	 * @param charByChar
+	 */
 	public void setCharbyChar(boolean charByChar) {
 		label.setDrawCharByChar(charByChar);
 	}
@@ -113,10 +147,10 @@ public  class Textbox extends Actor{
 	/**
 	 * Sets the textbox size and alignment for text
 	 * 
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
+	 * @param x1
+	 * @param y1
+	 * @param x2
+	 * @param y2
 	 * @param alignment
 	 */
 	public void setTextBox(float x1, float y1, float x2, float y2, int alignment) {

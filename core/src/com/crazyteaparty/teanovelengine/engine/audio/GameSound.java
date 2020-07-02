@@ -30,7 +30,6 @@ public class GameSound{
 	
 	public void loop () {
 		sound.loop();
-		
 	}
 	
 	/**

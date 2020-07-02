@@ -19,7 +19,7 @@ public class GameMusic {
 	}
 	
 	public void play (float volume) {
-		music.setVolume(volume);
+		setVolume(volume);
 		music.play();
 	}
 	
@@ -37,7 +37,7 @@ public class GameMusic {
 	 * @param volume
 	 */
 	public void setVolume (float volume) {
-		music.setVolume(volume / 100);
+		music.setVolume(volume / 100f);
 	}
 
 	public boolean isPlaying () {
